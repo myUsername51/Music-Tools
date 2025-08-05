@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <title>Music Website</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="container">
+        <div class="navbar">
+            <img src="media/logo.png" class="logo">
+            <ul>
+                <li>
+                    <a href="#">HOME</a>
+                    <a href="#">ABOUT</a>
+                    <a href="#">SPECIFICATIONS</a>
+                    <a href="#">PRODUCTS</a>
+                    <a href="#">CONNECT</a>
+                </li>
+            </ul>
+        </div>
+        
+        <div class="content">
+            <div class="left-col">
+                <h1>THE<br>REAL<br>SOUND</h1>
+            </div>
+            <div class="right-col">
+                <p>Click Here to Listen</p>
+                <img src="media/play.png" id="icon">
+                <div style="display: flex; flex-direction: column; align-items: center; margin-top: 18px;">
+                  <div class="song-volume-knob-container">
+                    <div class="song-volume-knob" id="song-volume-knob">
+                      <div class="song-knob-ticks" id="song-knob-ticks"></div>
+                      <div class="song-knob-indicator" id="song-knob-indicator"></div>
+                    </div>
+                    <div class="song-knob-label">VOLUME</div>
+                  </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div style="display: flex; justify-content: center; margin-top: 2rem;">
+        <iframe src="keyboard.html" width="1000" height="300" style="border: none;"></iframe>
+    </div>
+
+
+    <audio id="mySong">
+        <source src="media/song.mp3" type="audio/mp3">
+    </audio>
+
+    <style>
+    .song-volume-knob-container {
+      width: 60px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      margin: 0;
+      padding: 0;
+    }
+    .song-volume-knob {
+      width: 44px;
+      height: 44px;
+      background: linear-gradient(145deg, #444 60%, #222 100%);
+      border-radius: 50%;
+      border: 2px solid #888;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3), inset 0 2px 8px #111;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      margin: 0;
+      cursor: pointer;
+      transition: box-shadow 0.2s;
+    }
+    .song-volume-knob:active {
+      box-shadow: 0 0 12px #ffb300, 0 2px 8px rgba(0,0,0,0.3);
+    }
+    .song-knob-indicator {
+      width: 4px;
+      height: 14px;
+      background: #ffb300;
+      border-radius: 2px;
+      position: absolute;
+      top: 4px;
+      left: 50%;
+      transform: translateX(-50%) rotate(-45deg);
+      transform-origin: 50% 80%;
+      box-shadow: 0 1px 2px #222;
+    }
+    .song-knob-ticks {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 44px;
+      height: 44px;
+      pointer-events: none;
+      z-index: 1;
+    }
+    .song-knob-tick {
+      position: absolute;
+      width: 1.5px;
+      height: 3px;
+      background: #bbb;
+      border-radius: 0.75px;
+      left: 50%;
+      top: 2px;
+      transform-origin: 50% 18px;
+      opacity: 0.5;
+      transition: background 0.15s, opacity 0.15s;
+    }
+    .song-knob-tick.active {
+      background: #ffe082;
+      opacity: 0.85;
+    }
+    .song-knob-label {
+      color: #fff;
+      font-size: 0.65em;
+      letter-spacing: 2px;
+      margin-top: 10px;
+      text-align: center;
+      opacity: 0.7;
+      user-select: none !important;
+      -webkit-user-select: none !important;
+      -ms-user-select: none !important;
+    }
+    </style>
+
+    <script>
+        var mySong = document.getElementById("mySong");
+        var icon = document.getElementById("icon");
+        icon.onclick = function(){
+            if (mySong.paused){
+                mySong.play();
+                icon.src = "media/pause.png";
+            }else{
+                mySong.pause();
+                icon.src = "media/play.png";
+            }
+
+        }
+
+        // Song volume knob logic
+        const songKnob = document.getElementById('song-volume-knob');
+        const songKnobIndicator = document.getElementById('song-knob-indicator');
+        const songTicksContainer = document.getElementById('song-knob-ticks');
+        const songTickCount = 13;
+        const songMin = 0, songMax = 1;
+        const songMinDeg = -135, songMaxDeg = 135;
+        let songKnobValue = 0.5; // 0 to 1
+        let songIsDragging = false;
+        function renderSongTicks() {
+          if (!songTicksContainer) return;
+          songTicksContainer.innerHTML = '';
+          for (let i = 0; i < songTickCount; i++) {
+            const tick = document.createElement('div');
+            tick.className = 'song-knob-tick';
+            const deg = songMinDeg + (i / (songTickCount - 1)) * (songMaxDeg - songMinDeg);
+            tick.style.transform = `translateX(-50%) rotate(${deg}deg)`;
+            songTicksContainer.appendChild(tick);
+          }
+        }
+        renderSongTicks();
+        function setSongKnobRotation(val) {
+          // val: 0 to 1
+          const deg = ((val - songMin) / (songMax - songMin)) * (songMaxDeg - songMinDeg) + songMinDeg;
+          songKnobIndicator.style.transform = `translateX(-50%) rotate(${deg}deg)`;
+          // Update ticks
+          const percent = (val - songMin) / (songMax - songMin);
+          const activeTicks = Math.round(percent * (songTickCount - 1));
+          const allTicks = songTicksContainer ? songTicksContainer.querySelectorAll('.song-knob-tick') : [];
+          allTicks.forEach((tick, i) => {
+            if (i <= activeTicks) {
+              tick.classList.add('active');
+            } else {
+              tick.classList.remove('active');
+            }
+          });
+        }
+        function setSongVolume(val) {
+          // Snap to nearest tick
+          const percent = (val - songMin) / (songMax - songMin);
+          const snappedTick = Math.round(percent * (songTickCount - 1));
+          const snappedPercent = snappedTick / (songTickCount - 1);
+          songKnobValue = snappedPercent * (songMax - songMin) + songMin;
+          mySong.volume = songKnobValue;
+          setSongKnobRotation(songKnobValue);
+        }
+        setSongVolume(songKnobValue);
+        songKnob.addEventListener('mousedown', (e) => { songIsDragging = true; });
+        document.addEventListener('mouseup', () => { songIsDragging = false; });
+        document.addEventListener('mousemove', (e) => {
+          if (!songIsDragging) return;
+          const rect = songKnob.getBoundingClientRect();
+          const cx = rect.left + rect.width/2;
+          const cy = rect.top + rect.height/2;
+          const dx = e.clientX - cx;
+          const dy = e.clientY - cy;
+          let angle = Math.atan2(dx, -dy) * 180/Math.PI;
+          angle = Math.max(songMinDeg, Math.min(songMaxDeg, angle));
+          // Map angle to volume
+          const val = ((angle - songMinDeg) / (songMaxDeg - songMinDeg)) * (songMax - songMin) + songMin;
+          setSongVolume(val);
+        });
+        // Touch support
+        songKnob.addEventListener('touchstart', (e) => { songIsDragging = true; });
+        document.addEventListener('touchend', () => { songIsDragging = false; });
+        document.addEventListener('touchmove', (e) => {
+          if (!songIsDragging) return;
+          const touch = e.touches[0];
+          const rect = songKnob.getBoundingClientRect();
+          const cx = rect.left + rect.width/2;
+          const cy = rect.top + rect.height/2;
+          const dx = touch.clientX - cx;
+          const dy = touch.clientY - cy;
+          let angle = Math.atan2(dx, -dy) * 180/Math.PI;
+          angle = Math.max(songMinDeg, Math.min(songMaxDeg, angle));
+          const val = ((angle - songMinDeg) / (songMaxDeg - songMinDeg)) * (songMax - songMin) + songMin;
+          setSongVolume(val);
+        });
+    </script>
+    
+</body>
+</html>

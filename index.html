@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Music Tools Library</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- 粒子系统容器 - 用于显示动态粒子背景 -->
+    <div id="particles-container"></div>
+    
+    <!-- 音频可视化容器 - 用于显示频谱和波形 -->
+    <div id="audio-visualizer">
+        <canvas id="spectrum-canvas"></canvas>
+        <canvas id="waveform-canvas"></canvas>
+    </div>
+    
+    <!-- 液体效果容器 - 用于流体动画 -->
+    <div id="liquid-container"></div>
+    
+    <!-- 全息投影效果容器 -->
+    <div id="hologram-overlay"></div>
+    
+    <div class="container">
+        <!-- 3D Bubble Elements -->
+        <div class="bubble bubble-1"></div>
+        <div class="bubble bubble-2"></div>
+        <div class="bubble bubble-3"></div>
+        
+        <!-- Main Content -->
+        <div class="content">
+            <!-- 霓虹灯发光效果标题 -->
+            <h1 class="main-title wave-text neon-text">
+                <span class="char">M</span>
+                <span class="char">U</span>
+                <span class="char">S</span>
+                <span class="char">I</span>
+                <span class="char">C</span>
+                <span class="char">&nbsp;</span>
+                <span class="char">T</span>
+                <span class="char">O</span>
+                <span class="char">O</span>
+                <span class="char">L</span>
+                <span class="char">S</span>
+            </h1>
+            
+            <p class="subtitle wave-text neon-text">
+                <span class="char">E</span>
+                <span class="char">X</span>
+                <span class="char">P</span>
+                <span class="char">L</span>
+                <span class="char">O</span>
+                <span class="char">R</span>
+                <span class="char">E</span>
+                <span class="char">&nbsp;</span>
+                <span class="char">T</span>
+                <span class="char">H</span>
+                <span class="char">E</span>
+                <span class="char">&nbsp;</span>
+                <span class="char">S</span>
+                <span class="char">O</span>
+                <span class="char">U</span>
+                <span class="char">N</span>
+                <span class="char">D</span>
+            </p>
+            
+            <div class="play-section">
+                <div class="audio-controls">
+                    <!-- 播放按钮 -->
+                    <button class="play-button hologram-button" id="playButton">
+                        <div class="play-icon">▶</div>
+                        <div class="pause-icon">||</div>
+                        <span class="play-text">PLAY MUSIC</span>
+                        <span class="stop-text">STOP MUSIC</span>
+                        <div class="laser-beam"></div>
+                    </button>
+                    
+                    <!-- 上传按钮 -->
+                    <div class="upload-button-container">
+                        <button class="upload-button hologram-button" onclick="document.getElementById('audioFile').click()">
+                            <div class="upload-icon">📁</div>
+                            <span class="play-text">Upload MP3</span>
+                            <div class="laser-beam"></div>
+                        </button>
+                        <input type="file" id="audioFile" accept="audio/mp3" style="display: none">
+                    </div>
+                    
+                    <!-- 状态信息 -->
+                    <p class="sample-info">Click to hear a short musical piece</p>
+                </div>
+            </div>
+            
+            <!-- 3D 变换工具卡片 -->
+            <div class="tools-grid">
+                <div class="tool-card wave-text hologram-card" data-tilt id="keyboard-card">
+                    <div class="card-content">
+                        <h3>Metronome</h3>
+                        <p>Perfect timing for practice</p>
+                        <div class="hologram-scan-line"></div>
+                    </div>
+                </div>
+                <div class="tool-card wave-text hologram-card" data-tilt id="tuner-card">
+                    <div class="card-content">
+                        <h3>Tuner</h3>
+                        <p>Stay in tune</p>
+                        <div class="hologram-scan-line"></div>
+                    </div>
+                </div>
+                <div class="tool-card wave-text hologram-card" data-tilt id="chordfinder-card">
+                    <div class="card-content">
+                        <h3>Chord Finder</h3>
+                        <p>Discover new progressions</p>
+                        <div class="hologram-scan-line"></div>
+                    </div>
+                </div>
+                <div class="tool-card wave-text hologram-card" data-tilt id="scalegenerator-card">
+                    <div class="card-content">
+                        <h3>Scale Generator</h3>
+                        <p>Master your scales</p>
+                        <div class="hologram-scan-line"></div>
+                    </div>
+                </div>
+            </div>
+            <!-- 添加更多工具按钮 -->
+            <div class="more-tools-button">
+                <a href="more.html" class="hologram-button">
+                    <div class="play-icon">+</div>
+                    <span class="play-text">More Tools</span>
+                    <div class="laser-beam"></div>
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html>

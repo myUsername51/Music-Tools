@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Fast Piano with Tone.js</title>
+  <script src="https://unpkg.com/tone@latest/build/Tone.js"></script>
+  <style>
+    body {
+      font-family: sans-serif;
+      background: #f4f4f4;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      height: 100vh;
+      margin: 0;
+      width: 100vw;
+      box-sizing: border-box;
+    }
+
+    .keyboard {
+      display: flex;
+      gap: 0;
+      width: 900px;
+      max-width: 100vw;
+      overflow: hidden;
+      justify-content: flex-start;
+      padding: 0;
+      box-sizing: border-box;
+      position: relative;
+      height: 180px;
+      background: #222;
+      border-radius: 0;
+      box-shadow: none;
+      margin: 0;
+      flex: 1 1 auto;
+    }
+
+    .keyboard-outer-container {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      width: 900px;
+      max-width: 100vw;
+      margin: 0 auto;
+      padding: 0;
+      gap: 0;
+      border-radius: 22px;
+      box-shadow: none;
+      border: 4px solid #111;
+      border-top: 10px solid #111;
+      background: #222;
+      overflow: hidden;
+    }
+
+    .volume-knob-container {
+      width: 90px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      margin-left: 0;
+      margin-right: 0;
+      height: 180px;
+      background: #222;
+      border-radius: 0;
+      box-shadow: none;
+      position: relative;
+    }
+    .volume-knob {
+      width: 60px;
+      height: 60px;
+      background: linear-gradient(145deg, #444 60%, #222 100%);
+      border-radius: 50%;
+      border: 3px solid #888;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.4), inset 0 2px 8px #111;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      margin-top: 30px;
+      margin-bottom: 8px;
+      cursor: pointer;
+      transition: box-shadow 0.2s;
+    }
+    .volume-knob:active {
+      box-shadow: 0 0 16px #ffb300, 0 2px 8px rgba(0,0,0,0.4);
+    }
+    .knob-indicator {
+      width: 6px;
+      height: 22px;
+      background: #ffb300;
+      border-radius: 3px;
+      position: absolute;
+      top: 8px;
+      left: 50%;
+      transform: translateX(-50%) rotate(-45deg);
+      transform-origin: 50% 80%;
+      box-shadow: 0 1px 2px #222;
+    }
+    .knob-label {
+      color: #fff;
+      font-size: 0.8em;
+      letter-spacing: 2px;
+      margin-top: 2px;
+      text-align: center;
+      opacity: 0.7;
+      user-select: none !important;
+      -webkit-user-select: none !important;
+      -ms-user-select: none !important;
+    }
+    .knob-arc {
+      z-index: 0;
+    }
+
+    .key, .key *, .key-label, .key-mapping {
+      user-select: none !important;
+      -webkit-user-select: none !important;
+      -ms-user-select: none !important;
+    }
+    .key {
+      flex: 1 1 0;
+      min-width: 28px;
+      max-width: 38px;
+      height: 160px;
+      background: white;
+      border: 1px solid #aaa;
+      text-align: center;
+      cursor: pointer;
+      transition: background 0.2s, box-shadow 0.2s;
+      font-size: 0.7em;
+      position: relative;
+      z-index: 1;
+      border-radius: 0 0 5px 5px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.18);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-end;
+      padding-bottom: 8px;
+    }
+    .key-label {
+      font-size: 0.85em;
+      color: #333;
+      background: rgba(255,255,255,0.7);
+      border-radius: 3px;
+      padding: 1px 3px;
+      margin-bottom: 2px;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.08);
+      pointer-events: none;
+      line-height: 1.1;
+    }
+    .key-mapping {
+      font-size: 0.7em;
+      color: #888;
+      background: none;
+      margin-bottom: 0;
+      pointer-events: none;
+      line-height: 1.1;
+    }
+
+    .key.black {
+      background: #222;
+      color: #fff;
+      height: 110px;
+      width: 22px;
+      position: absolute;
+      top: 0;
+      z-index: 2;
+      border: 1px solid #111;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.5);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-end;
+      font-size: 0.65em;
+      pointer-events: auto;
+      border-radius: 0 0 3px 3px;
+      padding-bottom: 4px;
+    }
+    .key.black .key-label {
+      color: #fff;
+      background: rgba(0,0,0,0.7);
+    }
+    .key.black .key-mapping {
+      color: #ccc;
+    }
+
+    .key.active {
+      background: #ddd;
+      box-shadow: 0 0 8px #ffb300, 0 2px 6px rgba(0,0,0,0.18);
+    }
+    .key.black.active {
+      background: #444;
+      box-shadow: 0 0 8px #ffb300, 0 2px 10px rgba(0,0,0,0.5);
+    }
+    .knob-ticks {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 60px;
+      height: 60px;
+      pointer-events: none;
+      z-index: 1;
+    }
+    .knob-tick {
+      position: absolute;
+      width: 2px;
+      height: 4px;
+      background: #bbb;
+      border-radius: 1px;
+      left: 50%;
+      top: 2px;
+      transform-origin: 50% 28px;
+      opacity: 0.5;
+      transition: background 0.15s, opacity 0.15s;
+    }
+    .knob-tick.active {
+      background: #ffe082;
+      opacity: 0.85;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Mini Piano</h2>
+  <div class="keyboard-outer-container">
+    <div class="keyboard" id="keyboard" style="flex: 1 1 auto; margin-right: 0; padding-right: 0;"></div>
+    <div class="volume-knob-container" style="margin-left: 0;">
+      <div class="volume-knob" id="volume-knob">
+        <div class="knob-ticks" id="knob-ticks"></div>
+        <div class="knob-indicator" id="knob-indicator"></div>
+      </div>
+      <div class="knob-label">VOLUME</div>
+    </div>
+  </div>
+
+  <script>
+    // Set low-latency hint
+    Tone.context = new AudioContext({ latencyHint: "interactive" });
+
+    // Initialize synth and volume node
+    const volume = new Tone.Volume(0).toDestination();
+    const synth = new Tone.Synth();
+    synth.connect(volume);
+    // Custom knob logic
+    const knob = document.getElementById('volume-knob');
+    const knobIndicator = document.getElementById('knob-indicator');
+    let knobValue = 0; // dB, from -60 to 0
+    let isDragging = false;
+    // Render ticks
+    const tickCount = 13;
+    const min = -60, max = 0;
+    const minDeg = -135, maxDeg = 135;
+    const ticksContainer = document.getElementById('knob-ticks');
+    function renderTicks() {
+      if (!ticksContainer) return;
+      ticksContainer.innerHTML = '';
+      for (let i = 0; i < tickCount; i++) {
+        const tick = document.createElement('div');
+        tick.className = 'knob-tick';
+        const deg = minDeg + (i / (tickCount - 1)) * (maxDeg - minDeg);
+        tick.style.transform = `translateX(-50%) rotate(${deg}deg)`;
+        // The transform-origin in CSS sets the radius
+        ticksContainer.appendChild(tick);
+      }
+    }
+    renderTicks();
+    function setKnobRotation(val) {
+      // val: -60 to 0
+      // Map to -135deg (min) to 135deg (max)
+      const deg = ((val - min) / (max - min)) * (maxDeg - minDeg) + minDeg;
+      knobIndicator.style.transform = `translateX(-50%) rotate(${deg}deg)`;
+      // Update ticks
+      const percent = (val - min) / (max - min);
+      const activeTicks = Math.round(percent * (tickCount - 1));
+      const allTicks = ticksContainer ? ticksContainer.querySelectorAll('.knob-tick') : [];
+      allTicks.forEach((tick, i) => {
+        if (i <= activeTicks) {
+          tick.classList.add('active');
+        } else {
+          tick.classList.remove('active');
+        }
+      });
+    }
+    function setVolume(val) {
+      // Snap to nearest tick
+      const percent = (val - min) / (max - min);
+      const snappedTick = Math.round(percent * (tickCount - 1));
+      const snappedPercent = snappedTick / (tickCount - 1);
+      knobValue = snappedPercent * (max - min) + min;
+      volume.volume.value = knobValue;
+      setKnobRotation(knobValue);
+    }
+    setVolume(0);
+    knob.addEventListener('mousedown', (e) => { isDragging = true; });
+    document.addEventListener('mouseup', () => { isDragging = false; });
+    document.addEventListener('mousemove', (e) => {
+      if (!isDragging) return;
+      const rect = knob.getBoundingClientRect();
+      const cx = rect.left + rect.width/2;
+      const cy = rect.top + rect.height/2;
+      const dx = e.clientX - cx;
+      const dy = e.clientY - cy;
+      let angle = Math.atan2(dx, -dy) * 180/Math.PI;
+      angle = Math.max(-135, Math.min(135, angle));
+      // Map angle to volume
+      const min = -60, max = 0;
+      const minDeg = -135, maxDeg = 135;
+      const val = ((angle - minDeg) / (maxDeg - minDeg)) * (max - min) + min;
+      setVolume(val);
+    });
+    // Touch support
+    knob.addEventListener('touchstart', (e) => { isDragging = true; });
+    document.addEventListener('touchend', () => { isDragging = false; });
+    document.addEventListener('touchmove', (e) => {
+      if (!isDragging) return;
+      const touch = e.touches[0];
+      const rect = knob.getBoundingClientRect();
+      const cx = rect.left + rect.width/2;
+      const cy = rect.top + rect.height/2;
+      const dx = touch.clientX - cx;
+      const dy = touch.clientY - cy;
+      let angle = Math.atan2(dx, -dy) * 180/Math.PI;
+      angle = Math.max(-135, Math.min(135, angle));
+      const min = -60, max = 0;
+      const minDeg = -135, maxDeg = 135;
+      const val = ((angle - minDeg) / (maxDeg - minDeg)) * (max - min) + min;
+      setVolume(val);
+    });
+
+    const keyMap = {
+      // First octave
+      q: "C4",  '2': "C#4", w: "D4",  '3': "D#4", e: "E4", r: "F4",  '5': "F#4", t: "G4",  '6': "G#4", y: "A4",  '7': "A#4", u: "B4",
+      // Second octave
+      i: "C5",  '9': "C#5", o: "D5",  '0': "D#5", p: "E5", z: "F5",  s: "F#5", x: "G5",  d: "G#5", c: "A5",  f: "A#5", v: "B5",
+      // Third octave (partial, as per image)
+      b: "C6",  h: "C#6", n: "D6",  j: "D#6", m: "E6", ',': "F6",  l: "F#6", '.': "G6",  ';': "G#6", '/': "A6"
+    };
+
+    // Generate a list of notes in order for rendering
+    const noteOrder = [
+      // C4 octave
+      "C4", "C#4", "D4", "D#4", "E4", "F4", "F#4", "G4", "G#4", "A4", "A#4", "B4",
+      // C5 octave
+      "C5", "C#5", "D5", "D#5", "E5", "F5", "F#5", "G5", "G#5", "A5", "A#5", "B5",
+      // C6 octave (partial)
+      "C6", "C#6", "D6", "D#6", "E6", "F6", "F#6", "G6", "G#6", "A6"
+    ];
+
+    // Separate white and black notes for rendering
+    const isWhite = note => !note.includes('#');
+    const whiteNotes = noteOrder.filter(isWhite);
+    const blackNotes = noteOrder.filter(note => note.includes('#'));
+
+    // Map notes to their assigned keys
+    const noteToKey = {};
+    Object.entries(keyMap).forEach(([key, note]) => {
+      noteToKey[note] = key;
+    });
+
+    // Render white keys as flex items
+    const keyboardDiv = document.getElementById('keyboard');
+    keyboardDiv.innerHTML = '';
+    whiteNotes.forEach(note => {
+      const keyDiv = document.createElement('div');
+      keyDiv.className = 'key';
+      keyDiv.dataset.note = note;
+      keyDiv.dataset.key = noteToKey[note] || '';
+      // Add small label for note and mapping
+      const label = document.createElement('div');
+      label.className = 'key-label';
+      label.textContent = note;
+      const mapping = document.createElement('div');
+      mapping.className = 'key-mapping';
+      mapping.textContent = (noteToKey[note] || '').toUpperCase();
+      keyDiv.appendChild(label);
+      keyDiv.appendChild(mapping);
+      keyboardDiv.appendChild(keyDiv);
+    });
+
+    // Render black keys as absolutely positioned
+    const whiteKeyDivs = Array.from(keyboardDiv.getElementsByClassName('key'));
+    whiteNotes.forEach((note, i) => {
+      // For each white key, check if a black key follows
+      const nextNote = noteOrder[noteOrder.indexOf(note) + 1];
+      if (nextNote && nextNote.includes('#')) {
+        const blackKeyDiv = document.createElement('div');
+        blackKeyDiv.className = 'key black';
+        blackKeyDiv.dataset.note = nextNote;
+        blackKeyDiv.dataset.key = noteToKey[nextNote] || '';
+        // Add small label for note and mapping
+        const label = document.createElement('div');
+        label.className = 'key-label';
+        label.textContent = nextNote;
+        const mapping = document.createElement('div');
+        mapping.className = 'key-mapping';
+        mapping.textContent = (noteToKey[nextNote] || '').toUpperCase();
+        blackKeyDiv.appendChild(label);
+        blackKeyDiv.appendChild(mapping);
+        // Position the black key
+        const leftWhiteKey = whiteKeyDivs[i];
+        if (leftWhiteKey) {
+          blackKeyDiv.style.left = `${leftWhiteKey.offsetLeft + leftWhiteKey.offsetWidth * 0.7}px`;
+        }
+        keyboardDiv.appendChild(blackKeyDiv);
+      }
+    });
+
+    const activeNotes = new Set();
+
+    // Pre-start audio context on first click
+    document.body.addEventListener("click", async () => {
+      await Tone.start();
+      console.log("AudioContext started");
+    }, { once: true });
+
+    // Click interaction
+    document.querySelectorAll('.key').forEach(key => {
+      key.addEventListener('mousedown', async () => {
+        const note = key.dataset.note;
+        await Tone.start();
+        synth.triggerAttack(note);
+        key.classList.add("active");
+      });
+
+      key.addEventListener('mouseup', () => {
+        synth.triggerRelease();
+        key.classList.remove("active");
+      });
+
+      key.addEventListener('mouseleave', () => {
+        key.classList.remove("active");
+      });
+    });
+
+    // Keyboard down → triggerAttack
+    window.addEventListener('keydown', async (e) => {
+      const key = e.key.toLowerCase();
+      if (keyMap[key] && !activeNotes.has(key)) {
+        await Tone.start();
+        activeNotes.add(key);
+        synth.triggerAttack(keyMap[key]);
+        const el = document.querySelector(`.key[data-key="${key}"]`);
+        if (el) el.classList.add("active");
+      }
+    });
+
+    // Keyboard up → triggerRelease
+    window.addEventListener('keyup', (e) => {
+      const key = e.key.toLowerCase();
+      if (keyMap[key]) {
+        activeNotes.delete(key);
+        synth.triggerRelease();
+        const el = document.querySelector(`.key[data-key="${key}"]`);
+        if (el) el.classList.remove("active");
+      }
+    });
+  </script>
+
+</body>
+</html>

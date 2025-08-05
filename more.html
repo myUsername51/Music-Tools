@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Music Tools - More Tools</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- 粒子系统容器 -->
+    <div id="particles-container"></div>
+    
+    <!-- 音频可视化容器 -->
+    <div id="audio-visualizer">
+        <canvas id="spectrum-canvas"></canvas>
+        <canvas id="waveform-canvas"></canvas>
+    </div>
+    
+    <!-- 液体效果容器 -->
+    <div id="liquid-container"></div>
+    
+    <!-- 全息投影效果容器 -->
+    <div id="hologram-overlay"></div>
+    
+    <div class="container">
+        <!-- 返回按钮 -->
+        <div class="back-button">
+            <a href="index.html" class="hologram-button">
+                <div class="back-icon">←</div>
+                <span class="play-text">Back to Main</span>
+            </a>
+        </div>
+
+        <!-- 更多工具卡片 -->
+        <div class="content">
+            <h1 class="main-title wave-text neon-text">More Tools</h1>
+            
+            <div class="tools-grid">
+                <div class="tool-card wave-text hologram-card" data-tilt id="keyboard-card">
+                    <div class="card-content">
+                        <h3>Metronome</h3>
+                        <p>Perfect timing for practice</p>
+                        <div class="hologram-scan-line"></div>
+                    </div>
+                </div>
+                <div class="tool-card wave-text hologram-card" data-tilt id="tuner-card">
+                    <div class="card-content">
+                        <h3>Tuner</h3>
+                        <p>Stay in tune</p>
+                        <div class="hologram-scan-line"></div>
+                    </div>
+                </div>
+                <div class="tool-card wave-text hologram-card" data-tilt id="chordfinder-card">
+                    <div class="card-content">
+                        <h3>Chord Finder</h3>
+                        <p>Discover new progressions</p>
+                        <div class="hologram-scan-line"></div>
+                    </div>
+                </div>
+                <div class="tool-card wave-text hologram-card" data-tilt id="scalegenerator-card">
+                    <div class="card-content">
+                        <h3>Scale Generator</h3>
+                        <p>Master your scales</p>
+                        <div class="hologram-scan-line"></div>
+                    </div>
+                </div>
+                <div class="tool-card wave-text hologram-card" data-tilt id="drummachine-card">
+                    <div class="card-content">
+                        <h3>Drum Machine</h3>
+                        <p>Create your own beats</p>
+                        <div class="hologram-scan-line"></div>
+                    </div>
+                </div>
+                <div class="tool-card wave-text hologram-card" data-tilt id="looprecorder-card">
+                    <div class="card-content">
+                        <h3>Loop Recorder</h3>
+                        <p>Record and layer loops</p>
+                        <div class="hologram-scan-line"></div>
+                    </div>
+                </div>
+                <div class="tool-card wave-text hologram-card" data-tilt id="chordprogression-card">
+                    <div class="card-content">
+                        <h3>Chord Progression</h3>
+                        <p>Generate chord progressions</p>
+                        <div class="hologram-scan-line"></div>
+                    </div>
+                </div>
+                <div class="tool-card wave-text hologram-card" data-tilt id="midoplayer-card">
+                    <div class="card-content">
+                        <h3>MIDI Player</h3>
+                        <p>Play MIDI files</p>
+                        <div class="hologram-scan-line"></div>
+                    </div>
+                </div>
+                <div class="tool-card wave-text hologram-card" data-tilt id="soundeffects-card">
+                    <div class="card-content">
+                        <h3>Sound Effects</h3>
+                        <p>Create sound effects</p>
+                        <div class="hologram-scan-line"></div>
+                    </div>
+                </div>
+                <div class="tool-card wave-text hologram-card" data-tilt id="audiorecorder-card">
+                    <div class="card-content">
+                        <h3>Audio Recorder</h3>
+                        <p>Record and edit audio</p>
+                        <div class="hologram-scan-line"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="more.js"></script>
+</body>
+</html>
