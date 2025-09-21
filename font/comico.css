@@ -1,0 +1,20 @@
+/**
+* @license
+*
+* Font Family: Comico
+* Designed by: Frode Helland
+* URL: https://www.fontshare.com/fonts/comico
+* © 2025 Indian Type Foundry
+*
+* Comico Regular 
+
+*
+*/
+@font-face {
+  font-family: 'Comico';
+  src: url('font/Comico-Regular.otf');
+  font-weight: 400;
+  font-display: swap;
+  font-style: normal;
+}
+

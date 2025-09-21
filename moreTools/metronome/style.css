@@ -1,0 +1,140 @@
+body {
+  margin: 0;
+  background: #e3dac9;
+  font-family: sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 500px;
+}
+
+.metronome-box {
+  width: 250px;
+  height: 370px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 20px;
+  clip-path: polygon(30% 0%, 70% 0%, 100% 100%, 0% 100%);
+  background-image: linear-gradient(#a67c52, #8b5e3c), url('woodgrain.jpg'); /* wood texture */
+  background-size: cover;
+  box-shadow: inset 0 0 10px #5e3f28, inset 0 0 25px #2c1c12, 0 4px 20px rgba(0,0,0,0.4);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.arm {
+  width: 4px;
+  height: 180px;
+  background: #333;
+  position: absolute;
+  bottom: 156px; /* was top: 60px */
+  transform-origin: bottom center; /* was top center */
+  z-index: 0;
+  pointer-events: none;
+}
+
+.arm-ball {
+  width: 20px;
+  height: 20px;
+  background: #222;
+  border-radius: 50%;
+  position: absolute;
+  top: -10px; /* changed from 160px */
+  left: -8px;
+}
+
+
+@keyframes swing {
+  0%   { transform: rotate(-15deg); }
+  50%  { transform: rotate(15deg); }
+  100% { transform: rotate(-15deg); }
+}
+
+.controls {
+  margin-top: 240px; /* previously 210px */
+  text-align: center;
+  z-index: 1;
+}
+
+.tempo-scale {
+  position: absolute;
+  top: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 200px;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.tick {
+  width: 100%;
+  height: 1px;
+  background: #111;
+  margin: 6px 0;
+  position: relative;
+}
+
+
+.tick.highlight {
+  background: #ffcc00;
+}
+
+
+input {
+  width: 60px;
+  font-size: 1.2rem;
+  padding: 5px;
+  text-align: center;
+  background: #5e3f28; /* dark wood color */
+  color: #fce9d1;       /* light parchment text */
+  border: 2px solid #3a2a1d;
+  border-radius: 5px;
+}
+
+
+button {
+  font-size: 1rem;
+  padding: 6px 12px;
+  margin-top: 12px;
+  margin-right: 4px;
+  background: #5e3f28;
+  color: #fce9d1;
+  border: none;
+  border-radius: 5px;
+  transition: background 0.2s;
+}
+
+button:hover {
+  background: #a17a5c;
+}
+
+/*
+input[type=number] {
+  color: #fce9d1;         //text and spinner color 
+  background-color: #5e3f28;
+  border: 2px solid #3a2a1d;
+  border-radius: 5px;
+}
+*/
+
+input[type=number]:focus {
+  outline: none;
+  border-color: #ffcc00;
+  box-shadow: 0 0 5px #ffcc00;
+}
+
+/* Chrome, Safari, Edge */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}

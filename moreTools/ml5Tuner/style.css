@@ -1,0 +1,82 @@
+html, body {
+  margin: 0;
+  padding: 0;
+overflow: hidden;   /* kills scrollbars */
+
+}
+canvas {
+  display: block;
+}
+
+/* Center the frame on the page (optional) */
+body {
+  min-height: 100vh;
+  display: grid;
+  justify-content: center;  /* center horizontally */
+  align-items: flex-start;  /* stick to top */
+  background-color: #e3dac9;
+}
+
+
+/* The PNG frame */
+#tunerFrame {
+  position: relative;
+  width: 982px;           /* set to your PNG’s pixel width */
+  height: 1302px;          /* set to your PNG’s pixel height */
+  background-image: url("tuner5.png");
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+/* Let the p5 canvas sit inside at a precise spot */
+#tunerFrame canvas {
+  position: absolute;
+  left: 300px;  /* tweak: x offset where the “screen” area starts */
+  top:  300px;   /* tweak: y offset where the “screen” area starts */
+  /* Don’t set width/height here—p5 controls those with createCanvas() */
+    z-index: 1 !important;  
+
+}
+
+#frameImg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  z-index: 10 !important; /* put PNG above the canvas */
+  pointer-events: none;
+}
+
+
+.startButton {
+  background-color: #ffffff21; /* green background */
+  border: none;
+  color: white;
+  padding: 12px 24px;
+  font-size: 18px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.startButton:hover {
+  background-color: #ffffff5f; /* darker green on hover */
+}
+
+#tunerFrame .startButton {
+  position: absolute;
+  left: 420px;  /* tweak: x offset where you want the button */
+  top:  900px;   /* tweak: y offset where you want the button */
+  z-index: 20 !important; /* put button above canvas but below PNG */
+}
+
+/* 1) Give the wrapper REAL size (the original full size), then scale it. */
+#tunerWrapper {
+  transform: scale(0.4); /* <— make the whole rig smaller */
+  transform-origin: center; /* scale from the top-left corner */
+  transform-origin: top center; /* scale relative to top-center */
+  margin-top: 0; /* remove extra space */
+
+}

@@ -292,31 +292,51 @@ class TiltEffect {
 const toolData = {
     keyboard: {
         id: 'keyboard-card',
-        title: 'Metronome',
+        title: 'Keyboard Player',
         description: 'Perfect timing for practice. Stay in rhythm with our precise metronome.',
+        mini: '<iframe src="player/keyboardPlayer/keyboard.html" width="1000" height="800" style="border: none;"></iframe>',
         type: 'web',
-        link: 'metronome.html'
+        link: 'player/keyboardPlayer/keyboard.html'
     },
-    tuner: {
-        id: 'tuner-card',
-        title: 'Tuner',
+    chordPlayer: {
+        id: 'chord-card',
+        title: 'Chord Player',
         description: 'Stay in tune with our accurate tuner. Perfect for all instruments.',
+        mini: '<iframe src="player/chordPlayer/index.html" width="1000" height="400" style="border: none;"></iframe>',
         type: 'web',
-        link: 'tuner.html'
+        link: 'player/chordPlayer/index.html'
     },
-    chordFinder: {
-        id: 'chordfinder-card',
-        title: 'Chord Finder',
+    drumPlayer: {
+        id: 'drums-card',
+        title: 'Drum Player',
         description: 'Discover new chord progressions and learn different voicings.',
+        mini: '<iframe src="player/drumPlayer/drumPlayer.html" width="1000" height="800" style="border: none;"></iframe>',
         type: 'web',
-        link: 'chord-finder.html'
+        link: 'player/drumPlayer/drumPlayer.html'
     },
-    scaleGenerator: {
-        id: 'scalegenerator-card',
-        title: 'Scale Generator',
-        description: 'Generate scales in any key and mode. Perfect for practice and composition.',
+    pitchTrainer: {
+        id: 'pitch-card',
+        title: 'Pitch Trainer',
+        description: 'Become pitch perfect',
+        mini: '<iframe src="trainer/pitchTrainer/pitchTrainer.html" width="1000" height="300" style="border: none;"></iframe>',
         type: 'web',
-        link: 'chatGPTMetronomeExtension1.zip'
+        link: 'trainer/pitchTrainer/index.html'
+    },
+    scaleTrainer: {
+        id: 'scale-card',
+        title: 'Scale Trainer',
+        description: 'Familiarize yourself with scales in any key and mode.',
+        mini: '<iframe src="trainer/scaleTrainer/v3.html" width="1000" height="300" style="border: none;"></iframe>',
+        type: 'web',
+        link: 'trainer/scaleTrainer/index.html'
+    },
+    memoryTrainer: {
+        id: 'memory-card',
+        title: 'Notes\' Memory Trainer',
+        description: 'Memorize notes on the keyboard.',
+        mini: '<iframe src="trainer/memoryTrainer/noteMemoryTrainer.html" width="1000" height="300" style="border: none;"></iframe>',
+        type: 'web',
+        link: 'trainer/memoryTrainer/noteMemoryTrainer.html'
     }
 };
 
@@ -332,6 +352,7 @@ function initToolModals() {
                 </div>
                 <div class="tool-modal-body">
                     <div class="tool-description"></div>
+                    <div class="tool-mini"></div>
                     <div class="tool-links"></div>
                 </div>
             </div>
@@ -361,6 +382,8 @@ function showToolModal(toolId) {
     // 更新模态框内容
     modal.querySelector('.tool-modal-title').textContent = toolInfo.title;
     modal.querySelector('.tool-description').innerHTML = toolInfo.description;
+    modal.querySelector('.tool-mini').innerHTML = toolInfo.mini;
+
     
     // 清除旧的链接
     const linksContainer = modal.querySelector('.tool-links');

@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scale Trainer Quiz</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #e3dac9;
+            /*background-color: #f5f5f5;
+            margin: 0;
+            padding: 20px;
+            display: flex;*/
+            /*justify-content: center;
+            align-items: center;
+            min-height: 25vh;*/
+        }
+
+        .app-container {
+            background-color: #e3dac9;
+            border-radius: 10px;
+            /*box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);*/
+            padding: 10px;
+            max-width: 800px;
+            width: 100%;
+        }
+
+        h3 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .controls button {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            flex: 1;
+            min-width: 120px;
+        }
+
+        #new-quiz-btn {
+            background-color: #5e3f28;
+            color: white;
+        }
+
+        #play-scale-btn {
+            background-color: #5e3f28;
+            color: white;
+        }
+
+        /* Toggle switch styles */
+        .toggle-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 30px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #4CAF50;
+            transition: .4s;
+            border-radius: 34px;
+        }
+
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 22px;
+            width: 22px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .toggle-slider {
+            background-color: #9C27B0;
+        }
+
+        input:checked + .toggle-slider:before {
+            transform: translateX(30px);
+        }
+
+        .toggle-label {
+            font-weight: bold;
+            color: #333;
+        }
+
+        /* === Keyboard: match Pitch Trainer look === */
+        .piano-container {
+            /* Visually the same role as .keyboard-container */
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 2rem;
+            margin-bottom: 0rem;           /* tighter like pitch */
+            padding: 0 1rem;
+            user-select: none;
+            -webkit-user-select: none;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+
+            /* Remove the thick border and grey bg from old style */
+            border: none;
+            border-radius: 0.5rem;
+            background: transparent;
+
+            /* Height matches Pitch Trainer’s .keyboard */
+            height: 12rem;
+        }
+
+        .key {
+            /* shared key props */
+            position: relative;
+            box-sizing: border-box;
+            border-radius: 0.25rem;
+            cursor: pointer;
+            transition: all 0.1s ease;
+            user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            box-shadow: inset 0px -2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        /* White keys — same dimensions/feel as Pitch Trainer */
+        .white-key {
+            width: 3rem;                   /* match pitch keyboard width */
+            height: 100%;
+            background-color: #f8f8e8;     /* creamy white */
+            border: 1px solid #1f2937;     /* dark border like pitch */
+            z-index: 1;
+            margin-right: -1px;            /* crisp adjoining borders */
+        }
+
+        /* Black keys — same look as Pitch Trainer */
+        .black-key {
+            width: 2rem;                   /* match pitch keyboard width */
+            height: 60%;
+            background-color: #1f2937;
+            border: 1px solid #1f2937;
+            position: absolute;
+            z-index: 2;
+            top: 0;
+
+            /* IMPORTANT:
+            Your layout positions black keys via left:% per note
+            (e.g., .black-key[data-note="C#4"] { left: 10.5%; }).
+            We therefore DO NOT add transform: translateX(-50%)
+            here (Pitch Trainer uses JS to position them);
+            this keeps your alignment correct. */
+        }
+
+        .black-key[data-note="C#4"] { left: 32%; }
+        .black-key[data-note="D#4"] { left: 38%; }
+        .black-key[data-note="F#4"] { left: 50%; }
+        .black-key[data-note="G#4"] { left: 56%; }
+        .black-key[data-note="A#4"] { left: 62%; }
+
+        .key.active {
+            background-color: #d49666;
+        }
+
+        .quiz-container {
+            text-align: center;
+            /*height:60px;*/
+        }
+
+        .options-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .option-btn {
+            padding: 7px;
+            background-color: #f0f0f0;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.2s;
+        }
+
+        .option-btn:hover {
+            background-color: #e0e0e0;
+        }
+
+        .option-btn.correct {
+            background-color: #4CAF50;
+            color: white;
+            border-color: #4CAF50;
+        }
+
+        .option-btn.incorrect {
+            background-color: #F44336;
+            color: white;
+            border-color: #F44336;
+        }
+
+        .feedback {
+            margin-top: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            min-height: 10px;
+        }
+
+        .feedback.correct {
+            color: #4CAF50;
+        }
+
+        .feedback.incorrect {
+            color: #F44336;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!--<h3>Scale Trainer Quiz</h3>-->
+        
+        <div class="controls">
+            <div class="toggle-container">
+                <span class="toggle-label">Major</span>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="scale-type-toggle">
+                    <span class="toggle-slider"></span>
+                </label>
+                <span class="toggle-label">Minor</span>
+            </div>
+            <button id="new-quiz-btn">New Scale</button>
+            <button id="play-scale-btn">Play Scale</button>
+        </div>
+        
+        <div class="piano-container">
+            <!-- Piano keys will be generated by JavaScript -->
+        </div>
+        
+        <div class="quiz-container">
+            <h3>What scale is this?</h3>
+            <div class="options-container">
+                <!-- Options will be generated by JavaScript -->
+            </div>
+            <div id="feedback" class="feedback"></div>
+        </div>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Piano configuration
+            const OCTAVE = 4;
+            const WHITE_KEYS = ['C', 'D', 'E', 'F', 'G', 'A', 'B'];
+            const BLACK_KEYS = ['C#', 'D#', 'F#', 'G#', 'A#'];
+            const NOTE_DURATION = 0.3; // seconds
+            
+            // Audio context setup
+            let audioContext;
+            try {
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            } catch (e) {
+                console.error("Web Audio API not supported");
+            }
+            
+            let currentNotes = [];
+            let isPlaying = false;
+            
+            // Scale definitions
+            const MAJOR_SCALES = {
+                'C Major': ['C', 'D', 'E', 'F', 'G', 'A', 'B'],
+                'G Major': ['G', 'A', 'B', 'C', 'D', 'E', 'F#'],
+                'D Major': ['D', 'E', 'F#', 'G', 'A', 'B', 'C#'],
+                'A Major': ['A', 'B', 'C#', 'D', 'E', 'F#', 'G#'],
+                'E Major': ['E', 'F#', 'G#', 'A', 'B', 'C#', 'D#'],
+                'B Major': ['B', 'C#', 'D#', 'E', 'F#', 'G#', 'A#'],
+                'F# Major': ['F#', 'G#', 'A#', 'B', 'C#', 'D#', 'E#'],
+                'F Major': ['F', 'G', 'A', 'Bb', 'C', 'D', 'E'],
+                'Bb Major': ['Bb', 'C', 'D', 'Eb', 'F', 'G', 'A'],
+                'Eb Major': ['Eb', 'F', 'G', 'Ab', 'Bb', 'C', 'D'],
+                'Ab Major': ['Ab', 'Bb', 'C', 'Db', 'Eb', 'F', 'G'],
+                'Db Major': ['Db', 'Eb', 'F', 'Gb', 'Ab', 'Bb', 'C']
+            };
+            
+            const NATURAL_MINOR_SCALES = {
+                'A Minor': ['A', 'B', 'C', 'D', 'E', 'F', 'G'],
+                'E Minor': ['E', 'F#', 'G', 'A', 'B', 'C', 'D'],
+                'B Minor': ['B', 'C#', 'D', 'E', 'F#', 'G', 'A'],
+                'F# Minor': ['F#', 'G#', 'A', 'B', 'C#', 'D', 'E'],
+                'C# Minor': ['C#', 'D#', 'E', 'F#', 'G#', 'A', 'B'],
+                'G# Minor': ['G#', 'A#', 'B', 'C#', 'D#', 'E', 'F#'],
+                'D# Minor': ['D#', 'E#', 'F#', 'G#', 'A#', 'B', 'C#'],
+                'D Minor': ['D', 'E', 'F', 'G', 'A', 'Bb', 'C'],
+                'G Minor': ['G', 'A', 'Bb', 'C', 'D', 'Eb', 'F'],
+                'C Minor': ['C', 'D', 'Eb', 'F', 'G', 'Ab', 'Bb'],
+                'F Minor': ['F', 'G', 'Ab', 'Bb', 'C', 'Db', 'Eb'],
+                'Bb Minor': ['Bb', 'C', 'Db', 'Eb', 'F', 'Gb', 'Ab']
+            };
+            
+            // DOM elements
+            const pianoContainer = document.querySelector('.piano-container');
+            const optionsContainer = document.querySelector('.options-container');
+            const feedbackElement = document.getElementById('feedback');
+            const scaleTypeToggle = document.getElementById('scale-type-toggle');
+            const newQuizBtn = document.getElementById('new-quiz-btn');
+            const playScaleBtn = document.getElementById('play-scale-btn');
+            const majorLabel = document.querySelector('.toggle-label:first-child');
+            const minorLabel = document.querySelector('.toggle-label:last-child');
+            
+            // App state
+            let currentScaleType = 'major';
+            let currentScale = '';
+            let currentScaleNotes = [];
+            let pianoKeys = {};
+            
+            // Note frequencies
+            const noteFrequencies = {
+                'C4': 261.63, 'C#4': 277.18, 'D4': 293.66, 'D#4': 311.13,
+                'E4': 329.63, 'F4': 349.23, 'F#4': 369.99, 'G4': 392.00,
+                'G#4': 415.30, 'A4': 440.00, 'A#4': 466.16, 'B4': 493.88,
+                'Bb4': 466.16, 'Eb4': 311.13, 'Ab4': 415.30, 'Db4': 277.18
+            };
+            
+            // Initialize the piano
+            function createPiano() {
+                pianoContainer.innerHTML = '';
+                pianoKeys = {};
+                
+                // Create white keys first
+                WHITE_KEYS.forEach(note => {
+                    const key = document.createElement('div');
+                    key.className = 'key white-key';
+                    key.dataset.note = note + OCTAVE;
+                    pianoContainer.appendChild(key);
+                    pianoKeys[note + OCTAVE] = key;
+                });
+                
+                // Create black keys with proper positioning
+                BLACK_KEYS.forEach(note => {
+                    const key = document.createElement('div');
+                    key.className = 'key black-key';
+                    key.dataset.note = note + OCTAVE;
+                    pianoContainer.appendChild(key);
+                    pianoKeys[note + OCTAVE] = key;
+                });
+            }
+            
+            // Play a single note
+            function playNote(noteName, duration, when = 0) {
+                if (!audioContext) return null;
+                
+                const frequency = noteFrequencies[noteName];
+                if (!frequency) return null;
+                
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+                
+                oscillator.type = 'sine';
+                oscillator.frequency.value = frequency;
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+                
+                // Fade out to avoid clicks
+                gainNode.gain.setValueAtTime(0.5, audioContext.currentTime + when);
+                gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + when + duration);
+                
+                oscillator.start(audioContext.currentTime + when);
+                oscillator.stop(audioContext.currentTime + when + duration);
+                
+                return oscillator;
+            }
+            
+            // Play the current scale from low to high
+            function playScale() {
+                if (isPlaying) return;
+                isPlaying = true;
+                playScaleBtn.disabled = true;
+                
+                // Stop any currently playing notes
+                currentNotes.forEach(note => {
+                    if (note) note.stop();
+                });
+                currentNotes = [];
+                
+                // Sort notes from low to high based on frequency
+                const sortedNotes = [...currentScaleNotes].sort((a, b) => {
+                    const aNote = convertToSharp(a) + OCTAVE;
+                    const bNote = convertToSharp(b) + OCTAVE;
+                    return noteFrequencies[aNote] - noteFrequencies[bNote];
+                });
+
+                // First remove any existing highlights
+                highlightScale(currentScaleNotes);
+                
+                // Play each note with highlights disappearing when note plays
+                sortedNotes.forEach((note, index) => {
+                    const noteName = convertToSharp(note) + OCTAVE;
+                    const startTime = index * NOTE_DURATION;
+                    
+                    // Remove highlight when note plays
+                    setTimeout(() => {
+                        pianoKeys[noteName].classList.remove('active');
+                    }, startTime * 1000);
+                    
+                    // Play the note
+                    const oscillator = playNote(noteName, NOTE_DURATION, startTime);
+                    if (oscillator) {
+                        currentNotes.push(oscillator);
+                    }
+                });
+                
+                // Restore all highlights after playback completes
+                setTimeout(() => {
+                    highlightScale(currentScaleNotes);
+                    isPlaying = false;
+                    playScaleBtn.disabled = false;
+                }, sortedNotes.length * NOTE_DURATION * 1000);
+            }
+            
+            // Convert flat notes to sharp equivalents
+            function convertToSharp(note) {
+                return note.replace(/([A-G]#?)(b?)/, (match, n, b) => {
+                    if (b === 'b') {
+                        if (n === 'B') return 'A#';
+                        if (n === 'E') return 'D#';
+                        if (n === 'A') return 'G#';
+                        if (n === 'D') return 'C#';
+                        if (n === 'G') return 'F#';
+                        if (n === 'C') return 'B';
+                        if (n === 'F') return 'E';
+                    }
+                    return n + b;
+                });
+            }
+            
+            // Highlight the notes of a scale on the piano
+            function highlightScale(scaleNotes) {
+                Object.values(pianoKeys).forEach(key => {
+                    key.classList.remove('active');
+                });
+                
+                scaleNotes.forEach(note => {
+                    const fullNote = convertToSharp(note) + OCTAVE;
+                    if (pianoKeys[fullNote]) {
+                        pianoKeys[fullNote].classList.add('active');
+                    }
+                });
+            }
+            
+            // Generate a new quiz question
+            function generateQuiz() {
+                feedbackElement.textContent = '';
+                feedbackElement.className = 'feedback';
+                optionsContainer.innerHTML = '';
+                
+                const scales = currentScaleType === 'major' ? MAJOR_SCALES : NATURAL_MINOR_SCALES;
+                const scaleNames = Object.keys(scales);
+                const randomIndex = Math.floor(Math.random() * scaleNames.length);
+                currentScale = scaleNames[randomIndex];
+                currentScaleNotes = scales[currentScale];
+                
+                // Highlight the scale notes
+                highlightScale(currentScaleNotes);
+                
+                // Generate options
+                const options = [currentScale];
+                while (options.length < 4) {
+                    const randomOption = scaleNames[Math.floor(Math.random() * scaleNames.length)];
+                    if (!options.includes(randomOption)) {
+                        options.push(randomOption);
+                    }
+                }
+                
+                options.sort(() => Math.random() - 0.5);
+                
+                options.forEach(option => {
+                    const button = document.createElement('button');
+                    button.className = 'option-btn';
+                    button.textContent = option;
+                    button.addEventListener('click', () => checkAnswer(option));
+                    optionsContainer.appendChild(button);
+                });
+            }
+            
+            // Check if the selected answer is correct
+            function checkAnswer(selectedScale) {
+                const optionButtons = document.querySelectorAll('.option-btn');
+                
+                optionButtons.forEach(button => {
+                    button.disabled = true;
+                    if (button.textContent === currentScale) {
+                        button.classList.add('correct');
+                    } else if (button.textContent === selectedScale) {
+                        button.classList.add('incorrect');
+                    }
+                });
+                
+                if (selectedScale === currentScale) {
+                    feedbackElement.textContent = 'Correct! This is the ' + currentScale + ' scale.';
+                    feedbackElement.className = 'feedback correct';
+                } else {
+                    feedbackElement.textContent = 'Incorrect. This is the ' + currentScale + ' scale.';
+                    feedbackElement.className = 'feedback incorrect';
+                }
+            }
+            
+            // Toggle between major and minor scales
+            function toggleScaleType() {
+                currentScaleType = scaleTypeToggle.checked ? 'minor' : 'major';
+                majorLabel.style.fontWeight = currentScaleType === 'major' ? 'bold' : 'normal';
+                minorLabel.style.fontWeight = currentScaleType === 'minor' ? 'bold' : 'normal';
+                generateQuiz();
+            }
+            
+            // Event listeners
+            scaleTypeToggle.addEventListener('change', toggleScaleType);
+            newQuizBtn.addEventListener('click', generateQuiz);
+            playScaleBtn.addEventListener('click', playScale);
+            
+            // Initialize the app
+            createPiano();
+            generateQuiz();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,55 @@
+html, body { margin: 0; padding: 0; }
+canvas { display: block; }
+
+/* Center the frame on the page (optional) */
+body {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+}
+
+/* Container for canvas + overlay */
+#tunerFrame {
+  position: relative;
+  width: 982px;   /* your PNG width */
+  height: 1302px; /* your PNG height */
+}
+
+/* Canvas placed under the PNG bezel */
+#tunerFrame canvas {
+  position: absolute;
+  left: 300px;         /* adjust to align with the PNG “screen” */
+  top: 300px;
+  z-index: 1 !important;
+}
+
+/* Foreground bezel overlay */
+#frameImg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  z-index: 10 !important;  /* ABOVE the canvas */
+  pointer-events: none;    /* don’t block clicks */
+}
+
+/* Button examples */
+.startButton {
+  background-color: #ffffff21;
+  border: none;
+  color: white;
+  padding: 12px 24px;
+  font-size: 18px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+.startButton:hover { background-color: #ffffff5f; }
+
+#tunerFrame .startButton {
+  position: absolute;
+  left: 420px;
+  top: 900px;
+  z-index: 20 !important; /* above canvas; if you want ABOVE the bezel, use 9999 */
+}

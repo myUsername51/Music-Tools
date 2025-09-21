@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Note Memory Game</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.39/Tone.js"></script>
+  <style>
+    :root { --key-w: 60px; --key-h: 200px; }
+    body { font-family: system-ui, Arial, sans-serif; text-align: center; padding: 24px; background-color: #e3dac9;}
+    h1 { margin: 0 0 12px; }
+    .controls { display: grid; gap: 8px; grid-auto-flow: column; justify-content: center; align-items: center; margin: 8px 0 16px; }
+    .controls > * { padding: 8px 12px; }
+    select { padding: 6px 10px; }
+    #piano { display: flex; justify-content: center; flex-wrap: wrap; gap: 2px; margin: 16px 0; }
+    .key {
+      width: var(--key-w); height: var(--key-h);
+      border: 1px solid #222; background: #fff; cursor: pointer; user-select: none;
+      display: flex; align-items: flex-end; justify-content: center; padding-bottom: 6px; border-radius: 6px;
+      transition: transform 80ms ease, background 150ms ease;
+    }
+    .key:active { transform: translateY(1px); }
+    .key.playing { background: #c8f7c5; }
+    .key.locked { opacity: 0.6; cursor: not-allowed; }
+    #status { margin-top: 8px; font-size: 18px; min-height: 24px; }
+    #progress { font-size: 14px; color: #666; min-height: 18px; }
+    .hint { font-size: 12px; color: #888; margin-top: 6px; }
+    @media (max-width: 600px) {
+      :root { --key-w: 44px; --key-h: 140px; }
+      .controls { grid-auto-flow: row; }
+    }
+  </style>
+</head>
+<body>
+  <h1>Note Memory Game</h1>
+
+  <div class="controls">
+    <label>Length:
+      <select id="length">
+        <option>3</option><option>4</option><option>5</option>
+        <option>6</option><option>7</option><option>8</option>
+      </select>
+    </label>
+    <button id="start">New Round</button>
+    <button id="replay" disabled>Replay</button>
+  </div>
+
+  <div id="piano"></div>
+
+  <div id="status"></div>
+  <div id="progress"></div>
+  <!--<div class="hint">Click “New Round” to hear a sequence, then repeat it by clicking the keys.</div>-->
+
+  <script>
+    // ---------- Setup ----------
+    const notes = ["C4","D4","E4","F4","G4","A4","B4"]; // white keys only; easy visual mapping
+    const pianoDiv = document.getElementById("piano");
+    const statusDiv = document.getElementById("status");
+    const progressDiv = document.getElementById("progress");
+    const lengthSel = document.getElementById("length");
+    const startBtn = document.getElementById("start");
+    const replayBtn = document.getElementById("replay");
+
+    const synth = new Tone.Synth({ oscillator: { type: "sine" } }).toDestination();
+
+    let sequence = [];
+    let input = [];
+    let isPlayingBack = false;
+
+    // Create the keys
+    const keyEls = {};
+    notes.forEach(n => {
+      const el = document.createElement("div");
+      el.className = "key";
+      el.dataset.note = n;
+      el.textContent = n;
+      el.addEventListener("click", () => onKeyClick(n));
+      pianoDiv.appendChild(el);
+      keyEls[n] = el;
+    });
+
+    // ---------- Helpers ----------
+    function randChoice(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
+
+    function setKeysLocked(locked){
+      Object.values(keyEls).forEach(el => {
+        el.classList.toggle("locked", locked);
+      });
+    }
+
+    function uiReset(msg=""){
+      statusDiv.textContent = msg;
+      progressDiv.textContent = "";
+    }
+
+    async function startRound(){
+      await Tone.start(); // ensure audio context is started by a user gesture
+      uiReset("");
+      input = [];
+      const L = parseInt(lengthSel.value, 10) || 3;
+      sequence = Array.from({length:L}, () => randChoice(notes));
+      replayBtn.disabled = true;
+      setKeysLocked(true);
+      isPlayingBack = true;
+      await playSequence(sequence);
+      isPlayingBack = false;
+      setKeysLocked(false);
+      replayBtn.disabled = false;
+      statusDiv.textContent = "Your turn!";
+      updateProgress();
+    }
+
+    async function replay(){
+      if (sequence.length === 0) return;
+      // Reset input so the new attempt starts from the beginning
+      input = [];
+      updateProgress();
+      replayBtn.disabled = true;
+      setKeysLocked(true);
+      isPlayingBack = true;
+      await playSequence(sequence);
+      isPlayingBack = false;
+      setKeysLocked(false);
+      replayBtn.disabled = false;
+      statusDiv.textContent = "Your turn!";
+    }
+
+    async function playNote(note, durMs=500){
+      synth.triggerAttackRelease(note, durMs/1000);
+      const el = keyEls[note];
+      el.classList.add("playing");
+      await wait(durMs);
+      el.classList.remove("playing");
+    }
+
+    async function playSequence(seq){
+      // small lead-in
+      await wait(300);
+      for (const n of seq){
+        await playNote(n, 450);
+        await wait(200);
+      }
+    }
+
+    function wait(ms){ return new Promise(res => setTimeout(res, ms)); }
+
+    function updateProgress(){
+      progressDiv.textContent = input.length ? `Inputs: ${input.length}/${sequence.length}` : "";
+    }
+
+    function onKeyClick(note){
+      if (isPlayingBack || sequence.length === 0) return; // ignore during playback / before start
+      if (keyEls[note].classList.contains("locked")) return;
+
+      synth.triggerAttackRelease(note, 0.25);
+      input.push(note);
+      updateProgress();
+
+      const idx = input.length - 1;
+
+      // Early-miss feedback with retry enabled
+      if (input[idx] !== sequence[idx]){
+        statusDiv.textContent = "❌ Incorrect. Try again or press Replay.";
+        // allow retry: reset current input while keeping the same sequence
+        input = [];
+        updateProgress();
+        // keep keys unlocked so they can try again immediately
+        return;
+      }
+
+      if (input.length === sequence.length){
+        const correct = input.every((n,i)=> n===sequence[i]);
+        statusDiv.textContent = correct ? "✅ Correct!" : "❌ Incorrect. Try again or press Replay.";
+        if (!correct){
+          input = [];
+          updateProgress();
+          return;
+        }
+        // If correct, lock keys until a new round starts
+        setKeysLocked(true);
+      }
+    }
+
+    // ---------- Wire up buttons ----------
+    startBtn.addEventListener("click", startRound);
+    replayBtn.addEventListener("click", replay);
+
+    // Initial state
+    setKeysLocked(true);
+    uiReset("Click “New Round” to begin.");
+  </script>
+</body>
+</html>

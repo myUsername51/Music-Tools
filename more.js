@@ -3,72 +3,17 @@ const toolData = {
     keyboard: {
         id: 'keyboard-card',
         title: 'Metronome',
-        description: 'Perfect timing for practice. Stay in rhythm with our precise metronome.',
+        description: '<iframe src="moreTools/metronome/index.html" width="1000" height="300" style="border: none;"></iframe>',
         type: 'web',
         link: 'metronome.html'
+        
     },
     tuner: {
         id: 'tuner-card',
         title: 'Tuner',
-        description: 'Stay in tune with our accurate tuner. Perfect for all instruments.',
+        description: '<iframe src="moreTools/ml5tuner/index.html" width="1000" height="300" style="border: none;"></iframe>',
         type: 'web',
         link: 'tuner.html'
-    },
-    chordFinder: {
-        id: 'chordfinder-card',
-        title: 'Chord Finder',
-        description: 'Discover new chord progressions and learn different voicings.',
-        type: 'web',
-        link: 'chord-finder.html'
-    },
-    scaleGenerator: {
-        id: 'scalegenerator-card',
-        title: 'Scale Generator',
-        description: 'Generate scales in any key and mode. Perfect for practice and composition.',
-        type: 'web',
-        link: 'scale-generator.html'
-    },
-    drumMachine: {
-        id: 'drummachine-card',
-        title: 'Drum Machine',
-        description: 'Create your own beats with our powerful drum machine.',
-        type: 'web',
-        link: 'drum-machine.html'
-    },
-    loopRecorder: {
-        id: 'looprecorder-card',
-        title: 'Loop Recorder',
-        description: 'Record and layer loops for endless creativity.',
-        type: 'web',
-        link: 'loop-recorder.html'
-    },
-    chordProgression: {
-        id: 'chordprogression-card',
-        title: 'Chord Progression',
-        description: 'Generate and explore chord progressions easily.',
-        type: 'web',
-        link: 'chord-progression.html'
-    },
-    midiPlayer: {
-        id: 'midoplayer-card',
-        title: 'MIDI Player',
-        description: 'Play and control MIDI files with precision.',
-        type: 'web',
-        link: 'midi-player.html'
-    },
-    soundEffects: {
-        id: 'soundeffects-card',
-        title: 'Sound Effects',
-        description: 'Create and customize your own sound effects.',
-        type: 'web',
-        link: 'sound-effects.html'
-    },
-    audioRecorder: {
-        id: 'audiorecorder-card',
-        title: 'Audio Recorder',
-        description: 'Record and edit audio with professional tools.',
-        type: 'web',
-        link: 'audio-recorder.html'
     }
 };
 

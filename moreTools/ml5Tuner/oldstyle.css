@@ -1,0 +1,16 @@
+html, body {
+  margin: 0;
+  padding: 0;
+}
+canvas {
+  display: block;
+}
+
+body {
+    margin: 0; /* remove default margins */
+  height: 100vh; /* full viewport height */
+  background-image: url("tuner5.png");
+  background-size: contain; /* scale to fill screen */
+  background-position: center;  /* center the image */
+  background-repeat: no-repeat; /* don’t tile */
+}

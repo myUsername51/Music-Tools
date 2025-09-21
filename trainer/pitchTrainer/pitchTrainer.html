@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pitch Training App</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="stylepitch.css">
+</head>
+<body>
+    <div class="app-container">
+        <!--<h3 class="text-3xl font-bold text-center text-gray-900 mb-4">Pitch Trainer</h3>-->
+        <!--<p class="text-center text-gray-600 mb-8">Click Start to hear a note. Then, guess the note on the keyboard!</p>-->
+        
+        <div class="flex justify-between items-center mb-6">
+            <div class="text-lg font-semibold text-gray-700">
+                Score: <span id="scoreDisplay">0 / 0</span>
+            </div>
+            <div class="flex items-center gap-4">
+                <div class="flex items-center">
+                    <label for="octaveToggle" class="relative inline-flex items-center cursor-pointer mr-3">
+                        <input type="checkbox" value="" id="octaveToggle" class="sr-only peer">
+                        <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600"></div>
+                    </label>
+                    <span id="octaveToggleLabel" class="text-sm font-medium text-gray-900">1 Octave</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <label for="instrumentSelect" class="text-gray-700 font-medium">Instrument:</label>
+                    <select id="instrumentSelect" class="p-2 border border-gray-300 rounded-md">
+                        <option value="Synth">Piano</option>
+                        <option value="AMSynth">Bell</option>
+                        <option value="FMSynth">Flute</option>
+                        <option value="PluckSynth">Guitar</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="controls">
+            <!-- A single, dynamic button to start the game or go to the next round -->
+            <button id="mainActionButton" class="button start-button">Start</button>
+        </div>
+
+        <div class="keyboard-container">
+            <div id="keyboard" class="keyboard">
+                <!-- Keys will be dynamically generated here by JavaScript -->
+            </div>
+        </div>
+
+        <div class="controls mt-4">
+            <div id="feedbackMessage" class="feedback"></div>
+            <div class="flex gap-4">
+                <button id="resetButton" class="button reset-button" style="display: none;">Reset Score</button>
+            </div>
+        </div>
+    </div>
+    
+    <!--<div id="modalOverlay" class="modal-overlay hidden">
+        <div class="modal-content">
+            <h2 class="text-xl font-bold mb-4">Welcome!</h2>
+            <p class="mb-4">To start the app, you need to click OK to allow audio playback in the browser. This will not make any sound until you click "Start".</p>
+            <button id="modalButton" class="button start-button">OK</button>
+        </div>
+    </div>-->
+
+    <!-- Tone.js library for audio generation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
+    <script src="scriptpitch.js"></script>
+</body>
+</html>

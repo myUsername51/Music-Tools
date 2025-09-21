@@ -1,0 +1,191 @@
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: #a0522d; /* Warm brownish-orange background from the image */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    padding: 1rem;
+}
+
+.app-container {
+    width: 100%;
+    max-width: 900px;
+    background-color: #f5f5dc; /* Creamy off-white color */
+    padding: 2rem;
+    border-radius: 1.5rem; /* Larger border-radius for a rounded shape */
+    border: 2px solid #1f2937; /* Thin border to define the shape */
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2); /* Subtle, modern shadow */
+}
+
+.keyboard-container {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+    padding: 0 1rem;
+    user-select: none;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.keyboard {
+    display: flex;
+    position: relative;
+    height: 12rem;
+    border: none; /* No border on the main keyboard container */
+    border-radius: 0.5rem;
+}
+
+.white-key, .black-key {
+    border-radius: 0.25rem;
+    cursor: pointer;
+    transition: all 0.1s ease;
+    position: relative;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    box-shadow: inset 0px -2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.white-key {
+    width: 3rem;
+    height: 100%;
+    background-color: #f8f8e8; /* Slightly lighter cream key color */
+    border: 1px solid #1f2937; /* Defined key borders */
+    z-index: 1;
+    margin-right: -1px;
+}
+
+.white-key:hover, .white-key.active {
+    background-color: #e8e8d8; /* Slightly darker cream for hover/active */
+    box-shadow: inset 0px 1px 5px rgba(0, 0, 0, 0.2);
+}
+
+.black-key {
+    width: 2rem; /* Reverted to original width */
+    height: 60%; /* Reverted to original height */
+    background-color: #1f2937; /* Dark black key color */
+    border: 1px solid #1f2937;
+    position: absolute;
+    z-index: 2;
+    top: 0;
+    left: 0;
+    transform: translateX(-50%);
+    box-shadow: inset 0px -2px 5px rgba(0, 0, 0, 0.3);
+}
+
+.black-key:hover, .black-key.active {
+    background-color: #374151;
+    box-shadow: inset 0px 1px 5px rgba(0, 0, 0, 0.3);
+}
+
+.correct {
+    background-color: #10b981 !important;
+    border-color: #065f46 !important;
+}
+
+.wrong {
+    background-color: #ef4444 !important;
+    border-color: #b91c1c !important;
+}
+
+.controls {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+
+.button {
+    padding: 0.75rem 2rem;
+    font-size: 1.125rem;
+    font-weight: 600;
+    border-radius: 0.5rem; /* Less rounded buttons */
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border: 2px solid #1f2937;
+}
+
+.button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+}
+
+.start-button {
+    background-color: #2563eb;
+    color: #fff;
+}
+
+.start-button:disabled {
+    background-color: #d1d5db;
+    color: #6b7280;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+.next-button {
+    background-color: #10b981;
+    color: #fff;
+}
+.next-button:disabled {
+    background-color: #d1d5db;
+    color: #6b7280;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+.reset-button {
+    background-color: #f59e0b;
+    color: #fff;
+}
+
+.feedback {
+    font-size: 1.5rem;
+    font-weight: 700;
+    text-align: center;
+    min-height: 2rem;
+}
+
+.note-name {
+    font-size: 1.125rem;
+    font-weight: 600;
+    margin-top: 0.5rem;
+}
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+.modal-content {
+    background: #f5f5dc;
+    padding: 2rem;
+    border-radius: 1rem;
+    text-align: center;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    max-width: 400px;
+    border: 2px solid #1f2937;
+}
+
+/* Custom toggle switch styling */
+#octaveToggle:checked + div {
+    background-color: #2563eb;
+}
+#octaveToggle:checked + div:after {
+    transform: translateX(1.25rem);
+    border-color: white;
+}

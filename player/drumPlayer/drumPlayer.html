@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Wooden Acoustic Drum Kit</title>
+<link rel="preconnect" href="https://unpkg.com">
+<style>
+  :root{
+    --bg:#2a1a0a;
+    --wood1:#5c3d23;
+    --wood2:#7d5232;
+    --wood3:#9c6b43;
+    --metal:#c9c6c0;
+    --text:#2c1c12;
+    --muted:#d2c7b8;
+    --accent:#d19b65;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html,body{height:100%; background:radial-gradient(1000px 700px at 70% 15%, #e3dac9, #e3dac9); color:var(--text); font-family:Inter, ui-sans-serif, system-ui,-apple-system, Segoe UI, Roboto, Arial;}
+  .wrap{
+    height: 500px;  
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    overflow: hidden;  
+  }
+  .app{
+    height: 100%;  
+    padding: 15px;
+    width: 100%;
+    background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+    border:1px solid rgba(255,255,255,.08);
+    border-radius: 0 0 22px 22px;
+    box-shadow:0 30px 80px rgba(0,0,0,.55);
+    display: flex;
+    flex-direction: column;
+  }
+  header{
+    padding: 5px 0;
+    flex-shrink: 0;  
+  }
+  h1{
+    font-size: 1.1rem;
+    margin: 0 0 5px 0;
+    letter-spacing: .3px;
+    line-height: 1.2;
+  }
+  .stage {
+    flex: 1;  
+    position: relative;
+    min-height: 0;  
+  }
+  .btn{appearance:none;border:none;border-radius:12px;padding:10px 14px;background:var(--wood2);color:var(--text);cursor:pointer;font-weight:600;box-shadow:0 8px 20px rgba(0,0,0,.35)}
+  .btn:hover{transform:translateY(-1px);background:var(--wood3)}
+  .vol{display:flex;gap:10px;align-items:center;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.1);padding:8px 12px;border-radius:12px}
+  input[type="range"]{accent-color:var(--accent)}
+  .stage{
+    position:relative;
+    width:100%;
+    aspect-ratio: 16 / 9;
+    background:linear-gradient(180deg, rgba(92,61,35,.25), rgba(92,61,35,.1)), radial-gradient(1400px 600px at 50% 0%, rgba(255,255,255,.05), rgba(255,255,255,0) 70%);
+    border-radius:18px;
+    overflow:hidden;
+    border:2px solid var(--wood1);
+  }
+  /* Drum pieces */
+  .drum{
+    position:absolute;
+    display:grid;place-items:center;
+    color:var(--text);
+    text-align:center;
+    user-select:none;
+    transition:transform .06s ease, box-shadow .1s ease;
+  }
+  .shell{
+    position:relative;
+    width:100%;height:100%;
+    border-radius:50%;
+    background:
+      radial-gradient(circle at 35% 35%, rgba(255,255,255,.15), rgba(255,255,255,0) 45%),
+      radial-gradient(circle at 65% 65%, rgba(0,0,0,.2), rgba(0,0,0,0) 55%),
+      linear-gradient(135deg, var(--wood2), var(--wood3));
+    border: 10px solid var(--wood1);
+    box-shadow: inset 0 0 0 6px rgba(0,0,0,.35), 0 12px 30px rgba(0,0,0,.5);
+  }
+  .badge{
+    position:absolute; bottom:8px; right:8px;
+    font-size:.85rem;
+    color:var(--muted);
+    background:rgba(255,255,255,.08);
+    border:1px solid rgba(255,255,255,.14);
+    padding:4px 8px;border-radius:8px;
+  }
+  .label{
+    position:absolute; top:8px; left:8px; font-weight:700; font-size:.95rem; letter-spacing:.3px;
+    text-shadow:0 2px 8px rgba(0,0,0,.6);
+  }
+  .drum.active{ transform: translateY(-4px) scale(1.02); }
+  /* Positions */
+  #kick{ width:24%; aspect-ratio:1/1; left:38%; bottom:4%; }
+  #kick .shell{ border-width:16px; background:linear-gradient(145deg, var(--wood2), var(--wood3)); }
+  #snare{ width:16%; aspect-ratio:1/1; left:18%; bottom:22%; }
+  #hihat{ width:12%; aspect-ratio:1/1; left:11%; bottom:42%; }
+  #hihat .shell{ background: radial-gradient(circle at 50% 50%, rgba(255,240,180,.35), rgba(255,240,180,.05) 60%), linear-gradient(135deg, #d1b45c, #a38d42); border:8px solid var(--metal); }
+  #tomHigh{ width:14%; aspect-ratio:1/1; left:36%; bottom:32%; }
+  #tomMid{ width:15%; aspect-ratio:1/1; left:51%; bottom:29%; }
+  #tomLow{ width:18%; aspect-ratio:1/1; right:12%; bottom:18%; }
+  /* Stands */
+  /*
+  .stand{
+    position:absolute; width:2px; background:linear-gradient(180deg, var(--metal), #7a7a7a);
+    box-shadow:0 0 8px rgba(0,0,0,.6);
+  }
+  .stand.snare{ left:26%; bottom:10%; height:18%; }
+  .stand.hihat{ left:16%; bottom:20%; height:24%; }
+  .stand.tomh{ left:43%; bottom:16%; height:22%; }
+  .stand.tomm{ left:58%; bottom:14%; height:22%; }
+  .stand.toml{ right:21%; bottom:8%; height:26%; }
+  .pedal{
+    position:absolute; width:12%; height:10%; left:44%; bottom:0%;
+    border-radius:0 0 12px 12px;
+    background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.02));
+    border:1px solid rgba(0,0,0,.3);
+  }
+  footer{margin-top:12px;text-align:center;color:var(--muted);font-size:.88rem}
+  */
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="app">
+    <header>
+      <!--<h1>🥁 Wooden Acoustic Drum Kit — Keys: A S D J K L</h1>-->
+      <div class="controls">
+        <button id="start" class="btn">Start Audio</button>
+        <span class="vol">
+          <label for="volume">Volume</label>
+          <input id="volume" type="range" min="-24" max="6" step="1" value="-6" />
+        </span>
+      </div>
+    </header>
+
+    <section class="stage" id="stage">
+      <div class="stand snare"></div>
+      <div class="stand hihat"></div>
+      <div class="stand tomh"></div>
+      <div class="stand tomm"></div>
+      <div class="stand toml"></div>
+      <div class="pedal"></div>
+
+      <div id="kick" class="drum" data-key="A" data-sound="kick">
+        <div class="shell"></div><div class="label">Kick</div><div class="badge">A</div>
+      </div>
+      <div id="snare" class="drum" data-key="S" data-sound="snare">
+        <div class="shell"></div><div class="label">Snare</div><div class="badge">S</div>
+      </div>
+      <div id="hihat" class="drum" data-key="D" data-sound="hat">
+        <div class="shell"></div><div class="label">Hi‑Hat</div><div class="badge">D</div>
+      </div>
+      <div id="tomHigh" class="drum" data-key="L" data-sound="tom-high">
+        <div class="shell"></div><div class="label">Tom High</div><div class="badge">L</div>
+      </div>
+      <div id="tomMid" class="drum" data-key="K" data-sound="tom-mid">
+        <div class="shell"></div><div class="label">Tom Mid</div><div class="badge">K</div>
+      </div>
+      <div id="tomLow" class="drum" data-key="J" data-sound="tom-low">
+        <div class="shell"></div><div class="label">Floor Tom</div><div class="badge">J</div>
+      </div>
+    </section>
+
+    <footer>Keys: <strong>A</strong>=Kick, <strong>S</strong>=Snare, <strong>D</strong>=Hi‑Hat, <strong>J</strong>=Floor Tom, <strong>K</strong>=Tom Mid, <strong>L</strong>=Tom High.</footer>
+  </div>
+</div>
+
+<script src="https://unpkg.com/tone@14.8.49/build/Tone.js"></script>
+<script>
+(() => {
+  let audioReady=false;
+  const limiter=new Tone.Limiter(-1).toDestination();
+  const master=new Tone.Gain(0.5).connect(limiter);
+
+  const kick=new Tone.MembraneSynth({pitchDecay:0.05,octaves:8,oscillator:{type:"sine"},envelope:{attack:0.001,decay:0.5,sustain:0.0001,release:0.6}}).connect(master);
+  const snareFilter=new Tone.Filter({frequency:1800,type:"bandpass",Q:1}).connect(master);
+  const snare=new Tone.NoiseSynth({noise:{type:"white"},envelope:{attack:0.001,decay:0.18,sustain:0}}).connect(snareFilter);
+  const hatFilter=new Tone.Filter({frequency:8000,type:"highpass",Q:0.7}).connect(master);
+  const hat=new Tone.NoiseSynth({noise:{type:"white"},envelope:{attack:0.001,decay:0.06,sustain:0}}).connect(hatFilter);
+  const tom=new Tone.MembraneSynth({pitchDecay:0.008,octaves:2,oscillator:{type:"sine"},envelope:{attack:0.001,decay:0.35,sustain:0.0001,release:0.2}}).connect(master);
+
+  async function ensureAudio(){if(!audioReady){await Tone.start();audioReady=true;}}
+  function hit(sound){
+    switch(sound){
+      case "kick":kick.triggerAttackRelease("C2","8n");bounce("kick");break;
+      case "snare":snare.triggerAttackRelease("16n");bounce("snare");break;
+      case "hat":hat.triggerAttackRelease("32n");bounce("hihat");break;
+      case "tom-low":tom.triggerAttackRelease("G2","8n");bounce("tomLow");break;
+      case "tom-mid":tom.triggerAttackRelease("C3","8n");bounce("tomMid");break;
+      case "tom-high":tom.triggerAttackRelease("E3","8n");bounce("tomHigh");break;
+    }
+  }
+  function bounce(id){const el=document.getElementById(id);if(!el)return;el.classList.add("active");clearTimeout(el._t);el._t=setTimeout(()=>el.classList.remove("active"),120);}
+  document.getElementById("start").addEventListener("click",ensureAudio);
+  const vol=document.getElementById("volume");vol.addEventListener("input",e=>{const db=parseFloat(e.target.value);master.gain.rampTo(Tone.dbToGain(db),0.05);});
+  document.getElementById("stage").addEventListener("pointerdown",async e=>{const el=e.target.closest(".drum");if(!el)return;await ensureAudio();hit(el.dataset.sound);});
+  const keyMap={"a":"kick","s":"snare","d":"hat","j":"tom-low","k":"tom-mid","l":"tom-high"};
+  window.addEventListener("keydown",async e=>{const k=e.key.toLowerCase();const sound=keyMap[k];if(!sound)return;if(e.repeat)return;await ensureAudio();hit(sound);});
+})();
+</script>
+</body>
+</html>
