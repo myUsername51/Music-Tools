@@ -8,19 +8,15 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <!-- 粒子系统容器 - 用于显示动态粒子背景 -->
     <div id="particles-container"></div>
     
-    <!-- 音频可视化容器 - 用于显示频谱和波形 -->
     <div id="audio-visualizer">
         <canvas id="spectrum-canvas"></canvas>
         <canvas id="waveform-canvas"></canvas>
     </div>
     
-    <!-- 液体效果容器 - 用于流体动画 -->
     <div id="liquid-container"></div>
     
-    <!-- 全息投影效果容器 -->
     <div id="hologram-overlay"></div>
     
     <div class="container">
@@ -31,44 +27,34 @@
         
         <!-- Main Content -->
         <div class="content">
-            <!-- 霓虹灯发光效果标题 -->
+            <div class="logo">
+                <img src="logo/logo3glass.png">
+            </div>
+
             <h1 class="main-title wave-text neon-text">
-                <span class="char">M</span>
-                <span class="char">U</span>
-                <span class="char">S</span>
-                <span class="char">I</span>
-                <span class="char">C</span>
-                <span class="char">&nbsp;</span>
-                <span class="char">T</span>
-                <span class="char">O</span>
-                <span class="char">O</span>
-                <span class="char">L</span>
-                <span class="char">S</span>
+                <span class="char">THEORETICALLY</span>
             </h1>
             
             <p class="subtitle wave-text neon-text">
-                <span class="char">E</span>
-                <span class="char">X</span>
                 <span class="char">P</span>
                 <span class="char">L</span>
-                <span class="char">O</span>
-                <span class="char">R</span>
-                <span class="char">E</span>
+                <span class="char">A</span>
+                <span class="char">Y</span>
                 <span class="char">&nbsp;</span>
-                <span class="char">T</span>
-                <span class="char">H</span>
-                <span class="char">E</span>
-                <span class="char">&nbsp;</span>
-                <span class="char">S</span>
-                <span class="char">O</span>
-                <span class="char">U</span>
+                <span class="char">A</span>
                 <span class="char">N</span>
                 <span class="char">D</span>
+                <span class="char">&nbsp;</span>
+                <span class="char">T</span>
+                <span class="char">R</span>
+                <span class="char">A</span>
+                <span class="char">I</span>
+                <span class="char">N</span>
             </p>
             
             <div class="play-section">
                 <div class="audio-controls">
-                    <!-- 播放按钮 -->
+                    <!-- play button -->
                     <button class="play-button hologram-button" id="playButton">
                         <div class="play-icon">▶</div>
                         <div class="pause-icon">||</div>
@@ -77,7 +63,7 @@
                         <div class="laser-beam"></div>
                     </button>
                     
-                    <!-- 上传按钮 -->
+                    <!-- upload button -->
                     <div class="upload-button-container">
                         <button class="upload-button hologram-button" onclick="document.getElementById('audioFile').click()">
                             <div class="upload-icon">📁</div>
@@ -86,18 +72,16 @@
                         </button>
                         <input type="file" id="audioFile" accept="audio/mp3" style="display: none">
                     </div>
-                    
-                    <!-- 状态信息 -->
-                    <p class="sample-info">Click to hear a short musical piece</p>
+                    <p class="sample-info">upload a song to play along</p>
                 </div>
             </div>
             
-            <!-- 3D 变换工具卡片 -->
+            <!-- card grid -->
             <div class="tools-grid">
                 <div class="tool-card wave-text hologram-card" data-tilt id="keyboard-card">
                     <div class="card-content">
                         <h3>Keyboard</h3>
-                        <p>Perfect timing for practice</p>
+                        <p>The piano is your playground</p>
                         <img src="photos/piano.png" alt="Metronome Background" class="card-image">
                         <div class="hologram-scan-line"></div>
                     </div>
@@ -105,7 +89,7 @@
                 <div class="tool-card wave-text hologram-card" data-tilt id="chord-card">
                     <div class="card-content">
                         <h3>Chord Player</h3>
-                        <p>Discover new progressions</p>
+                        <p>Discover new chord progressions</p>
                         <img src="photos/chordPic1.png" alt="Metronome Background" class="card-image">
                         <div class="hologram-scan-line"></div>
                     </div>
@@ -113,7 +97,7 @@
                 <div class="tool-card wave-text hologram-card" data-tilt id="drums-card">
                     <div class="card-content">
                         <h3>Drums</h3>
-                        <p>Boots and cats</p>
+                        <p>Boots and cats and...</p>
                         <img src="photos/drums.png" alt="Metronome Background" class="card-image">
                         <div class="hologram-scan-line"></div>
                     </div>
@@ -140,12 +124,11 @@
                         <h3>Memory Trainer</h3>
                         <p>Become familiar with notes</p>
                         <img src="photos/memory.png" alt="Metronome Background" class="card-image">
-
                         <div class="hologram-scan-line"></div>
                     </div>
                 </div>
             </div>
-            <!-- 添加更多工具按钮 -->
+            <!-- more tools page -->
             <div class="more-tools-button">
                 <a href="more.html" class="hologram-button">
                     <div class="play-icon">+</div>

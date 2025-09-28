@@ -12,7 +12,7 @@ let audioBuffer = null; // 用于存储音频文件
 let audioSource = null; // 用于存储音频源
 let currentAudioTime = 0; // 用于记录当前播放时间
 
-// ===== 粒子系统类 =====
+//NOT IN USE
 class Particle {
     constructor(x, y, size, speed, color) {
         this.x = x;
@@ -22,10 +22,8 @@ class Particle {
         this.color = color;
         this.element = null;
         this.audioReactive = false;
-        this.createParticle();
+        //this.createParticle();
     }
-
-    // 创建粒子DOM元素
     createParticle() {
         this.element = document.createElement('div');
         this.element.className = 'particle';
@@ -37,16 +35,13 @@ class Particle {
         document.getElementById('particles-container').appendChild(this.element);
     }
 
-    // 更新粒子位置（跟随鼠标）
     update() {
         if (this.audioReactive && audioData) {
-            // 音频反应模式：根据音频数据调整粒子
             const audioIndex = Math.floor((this.x / window.innerWidth) * audioData.length);
             const audioValue = audioData[audioIndex] || 0;
             const scale = 1 + (audioValue / 255) * 2;
             this.element.style.transform = `scale(${scale})`;
         } else {
-            // 鼠标跟随模式：粒子缓慢向鼠标位置移动
             const dx = mouseX - this.x;
             const dy = mouseY - this.y;
             this.x += dx * 0.01;
@@ -55,8 +50,6 @@ class Particle {
             this.element.style.top = this.y + 'px';
         }
     }
-
-    // 销毁粒子
     destroy() {
         if (this.element) {
             this.element.remove();
@@ -64,7 +57,6 @@ class Particle {
     }
 }
 
-// ===== 粒子系统管理器 =====
 class ParticleSystem {
     constructor() {
         this.particles = [];
@@ -72,14 +64,11 @@ class ParticleSystem {
         this.init();
     }
 
-    // 初始化粒子系统
     init() {
-        // 创建初始粒子
         for (let i = 0; i < this.maxParticles; i++) {
             this.createParticle();
         }
         
-        // 定期创建新粒子
         setInterval(() => {
             if (this.particles.length < this.maxParticles) {
                 this.createParticle();
@@ -87,7 +76,6 @@ class ParticleSystem {
         }, 2000);
     }
 
-    // 创建单个粒子
     createParticle() {
         const x = Math.random() * window.innerWidth;
         const y = Math.random() * window.innerHeight;
@@ -104,14 +92,12 @@ class ParticleSystem {
         this.particles.push(particle);
     }
 
-    // 更新所有粒子
     update() {
         this.particles.forEach(particle => {
             particle.update();
         });
     }
 
-    // 切换到音频反应模式
     setAudioReactive(reactive) {
         this.particles.forEach(particle => {
             particle.audioReactive = reactive;
@@ -119,7 +105,7 @@ class ParticleSystem {
     }
 }
 
-// ===== 音频可视化系统 =====
+// Audio visualizer
 class AudioVisualizer {
     constructor() {
         this.spectrumCanvas = document.getElementById('spectrum-canvas');
@@ -130,13 +116,12 @@ class AudioVisualizer {
         this.init();
     }
 
-    // 初始化画布
     init() {
         this.resizeCanvas();
         window.addEventListener('resize', () => this.resizeCanvas());
     }
 
-    // 调整画布大小
+    //resize canvas
     resizeCanvas() {
         this.spectrumCanvas.width = window.innerWidth;
         this.spectrumCanvas.height = window.innerHeight;
@@ -144,7 +129,6 @@ class AudioVisualizer {
         this.waveformCanvas.height = window.innerHeight;
     }
 
-    // 开始音频可视化
     startVisualization(audioContext, analyser) {
         this.analyser = analyser;
         this.dataArray = new Uint8Array(analyser.frequencyBinCount);
@@ -152,12 +136,11 @@ class AudioVisualizer {
         this.animate();
     }
 
-    // 停止音频可视化
     stopVisualization() {
         this.visualizer.classList.remove('active');
     }
 
-    // 动画循环
+    //animate
     animate() {
         if (!this.analyser) return;
 
@@ -166,24 +149,24 @@ class AudioVisualizer {
         const width = this.spectrumCanvas.width;
         const height = this.spectrumCanvas.height;
 
-        // 清除画布
+        //clear canvas
         spectrumCtx.clearRect(0, 0, width, height);
         waveformCtx.clearRect(0, 0, width, height);
 
-        // 获取音频数据
+        //get data for drawing
         this.analyser.getByteFrequencyData(this.dataArray);
-        audioData = this.dataArray; // 供粒子系统使用
+        audioData = this.dataArray; //for particle system
 
-        // 绘制频谱
+        //draw spectrum
         this.drawSpectrum(spectrumCtx, width, height);
         
-        // 绘制波形
+        //draw waveoform
         this.drawWaveform(waveformCtx, width, height);
 
         requestAnimationFrame(() => this.animate());
     }
 
-    // 绘制频谱
+    //draw spectrum
     drawSpectrum(ctx, width, height) {
         const barWidth = width / this.dataArray.length;
         
@@ -201,7 +184,7 @@ class AudioVisualizer {
         }
     }
 
-    // 绘制波形
+    //draw waveform
     drawWaveform(ctx, width, height) {
         ctx.strokeStyle = '#00ffff';
         ctx.lineWidth = 2;
@@ -228,7 +211,7 @@ class AudioVisualizer {
     }
 }
 
-// ===== 液体效果系统 =====
+// Liquid text effect
 class LiquidEffect {
     constructor() {
         this.container = document.getElementById('liquid-container');
@@ -245,21 +228,20 @@ class LiquidEffect {
         
         this.container.appendChild(ripple);
         
-        // 动画结束后移除元素
         setTimeout(() => {
             ripple.remove();
         }, 1000);
     }
 }
 
-// ===== 3D 变换系统 =====
+//tile effect
 class TiltEffect {
     constructor() {
         this.cards = document.querySelectorAll('[data-tilt]');
         this.init();
     }
 
-    // 初始化3D倾斜效果
+    //slant effect
     init() {
         this.cards.forEach(card => {
             card.addEventListener('mousemove', (e) => this.handleMouseMove(e, card));
@@ -267,7 +249,7 @@ class TiltEffect {
         });
     }
 
-    // 处理鼠标移动
+    //move with mouse
     handleMouseMove(e, card) {
         const rect = card.getBoundingClientRect();
         const x = e.clientX - rect.left;
@@ -282,13 +264,12 @@ class TiltEffect {
         card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(20px)`;
     }
 
-    // 处理鼠标离开
     handleMouseLeave(e, card) {
         card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) translateZ(0px)';
     }
 }
 
-// ===== 工具数据 =====
+//modal cards
 const toolData = {
     keyboard: {
         id: 'keyboard-card',
@@ -340,9 +321,9 @@ const toolData = {
     }
 };
 
-// ===== 模态框功能 =====
+//modal frame
 function initToolModals() {
-    // 创建模态框模板
+    //modal formate
     const modalTemplate = `
         <div class="tool-modal" id="toolModal">
             <div class="tool-modal-content">
@@ -359,10 +340,8 @@ function initToolModals() {
         </div>
     `;
     
-    // 将模态框添加到body
     document.body.insertAdjacentHTML('beforeend', modalTemplate);
 
-    // 为工具卡片添加点击事件
     Object.entries(toolData).forEach(([key, tool]) => {
         const card = document.getElementById(tool.id);
         if (card) {
@@ -379,17 +358,13 @@ function showToolModal(toolId) {
     
     if (!toolInfo) return;
 
-    // 更新模态框内容
     modal.querySelector('.tool-modal-title').textContent = toolInfo.title;
     modal.querySelector('.tool-description').innerHTML = toolInfo.description;
     modal.querySelector('.tool-mini').innerHTML = toolInfo.mini;
-
     
-    // 清除旧的链接
     const linksContainer = modal.querySelector('.tool-links');
     linksContainer.innerHTML = '';
     
-    // 添加新的链接
     const link = document.createElement('a');
     link.className = 'tool-link';
     link.href = toolInfo.link;
@@ -404,13 +379,11 @@ function showToolModal(toolId) {
     
     linksContainer.appendChild(link);
     
-    // 显示模态框
     modal.style.display = 'block';
     
-    // 添加动画效果
     modal.classList.add('modal-show');
     
-    // 移除之前的动画类
+    //rid old animation
     setTimeout(() => {
         modal.classList.remove('modal-show');
     }, 1000);
@@ -421,11 +394,9 @@ function closeToolModal() {
     modal.style.display = 'none';
 }
 
-// ===== 音频系统增强 =====
 function initAudio() {
     if (!audioContext) {
         audioContext = new (window.AudioContext || window.webkitAudioContext)();
-        console.log('音频上下文已初始化');
     }
 }
 
@@ -436,37 +407,32 @@ function handleAudioFileUpload() {
         if (!file) return;
         
         try {
-            console.log('开始加载音频文件:', file.name);
             
-            // 检查文件类型
+            //check file type
             if (!file.type.startsWith('audio/')) {
                 alert('Please select an audio file.');
                 return;
             }
             
-            // 检查文件大小
+            //check file size
             if (file.size > 100 * 1024 * 1024) { // 100MB
                 alert('File is too large. Please select a file under 100MB.');
                 return;
             }
             
-            // 确保音频上下文已初始化
             initAudio();
             
-            // 读取文件
+            //read file
             const arrayBuffer = await file.arrayBuffer();
-            console.log('文件读取成功，大小:', arrayBuffer.byteLength);
             
             // 解码音频
             audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
-            console.log('音频解码成功，通道数:', audioBuffer.numberOfChannels);
             
-            // 更新UI
+            //update UI
             const playButton = document.getElementById('playButton');
             playButton.classList.remove('audio-playing');
             document.querySelector('.sample-info').textContent = `Ready to play: ${file.name}`;
             
-            // 如果正在播放，停止当前播放
             if (isPlaying) {
                 stopMusicSample();
             }
@@ -488,18 +454,17 @@ function handleAudioFileUpload() {
 function stopMusicSample() {
     if (!isPlaying) return;
     
-    // 清理音频源
+    //clean audio
     if (audioSource) {
-        // 记录当前播放时间
         currentAudioTime = audioContext.currentTime;
         
-        // 停止音频源
+        //stop music
         audioSource.stop(0);
         audioSource.disconnect();
         audioSource = null;
     }
     
-    // 重置状态
+    //reset state
     isPlaying = false;
     const playButton = document.getElementById('playButton');
     playButton.classList.remove('audio-playing');
@@ -513,37 +478,35 @@ function playMusicSample() {
     initAudio();
     isPlaying = true;
     
-    // 创建音频分析器
+    //create audio analyzer
     analyser = audioContext.createAnalyser();
     analyser.fftSize = 256;
     const bufferLength = analyser.frequencyBinCount;
     
-    // 视觉反馈
     const playButton = document.getElementById('playButton');
     playButton.classList.add('audio-playing');
     
-    // 启动音频可视化
+    //start audio visualization
     audioVisualizer.startVisualization(audioContext, analyser);
     
-    // 切换到音频反应模式
     particleSystem.setAudioReactive(true);
     
-    // 创建音频源
+    //create audio source
     audioSource = audioContext.createBufferSource();
     audioSource.buffer = audioBuffer;
     audioSource.connect(analyser);
     analyser.connect(audioContext.destination);
     
-    // 开始播放
+    //start music
     audioSource.start(0, currentAudioTime);
     
-    // 音乐结束后清理
+    //stop music
     audioSource.onended = () => {
         stopMusicSample();
     };
 }
 
-// ===== 波文字动画 =====
+//Text wave animation
 function createWaveAnimation(element) {
     const chars = element.querySelectorAll('.char');
     chars.forEach((char, index) => {
@@ -557,21 +520,19 @@ function createWaveAnimation(element) {
     }, 1000);
 }
 
-// ===== 全局实例 =====
+
 let particleSystem;
 let audioVisualizer;
 let liquidEffect;
 let tiltEffect;
 
-// ===== 页面加载初始化 =====
+//Starting page
 document.addEventListener('DOMContentLoaded', function() {
-    // 初始化各个系统
     particleSystem = new ParticleSystem();
     audioVisualizer = new AudioVisualizer();
     liquidEffect = new LiquidEffect();
     tiltEffect = new TiltEffect();
     
-    // 波文字动画
     const waveTexts = document.querySelectorAll('.wave-text');
     waveTexts.forEach(text => {
         text.addEventListener('click', () => {
@@ -579,7 +540,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
     
-    // 播放按钮功能
     const playButton = document.getElementById('playButton');
     playButton.addEventListener('click', () => {
         console.log('Button clicked, current state:', isPlaying);
@@ -593,7 +553,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
     
-    // 工具卡片波动画
     const toolCards = document.querySelectorAll('.tool-card');
     toolCards.forEach(card => {
         card.addEventListener('click', () => {
@@ -604,7 +563,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
     
-    // 气泡交互效果
     const bubbles = document.querySelectorAll('.bubble');
     bubbles.forEach(bubble => {
         bubble.addEventListener('mouseenter', () => {
@@ -616,7 +574,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
     
-    // 鼠标移动视差效果
     document.addEventListener('mousemove', (e) => {
         mouseX = e.clientX;
         mouseY = e.clientY;
@@ -633,14 +590,12 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
     
-    // 鼠标移动液体涟漪效果
     document.addEventListener('mousemove', (e) => {
         if (Math.random() < 0.1) { // 10% 概率创建涟漪
             liquidEffect.createRipple(e.clientX, e.clientY);
         }
     });
     
-    // 页面加载时的初始动画
     setTimeout(() => {
         const mainTitle = document.querySelector('.main-title');
         createWaveAnimation(mainTitle);
@@ -651,17 +606,16 @@ document.addEventListener('DOMContentLoaded', function() {
         createWaveAnimation(subtitle);
     }, 2000);
     
-    // 粒子系统动画循环
+    /*
     function animateParticles() {
         particleSystem.update();
         requestAnimationFrame(animateParticles);
     }
     animateParticles();
+    */
     
-    // 初始化工具模态框
     initToolModals();
     
-    // 初始化音频文件上传
     handleAudioFileUpload();
 });
 
