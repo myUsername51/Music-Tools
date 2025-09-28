@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Note Memory Game</title>
+  <title></title>
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.39/Tone.js"></script>
   <style>
@@ -17,7 +17,6 @@
       width: var(--key-w); height: var(--key-h);
       border: 1px solid #222; background: #fff; cursor: pointer; user-select: none;
       display: flex; align-items: flex-end; justify-content: center; padding-bottom: 6px; border-radius: 6px;
-      transition: transform 80ms ease, background 150ms ease;
     }
     .key:active { transform: translateY(1px); }
     .key.playing { background: #c8f7c5; }
@@ -32,7 +31,7 @@
   </style>
 </head>
 <body>
-  <h1>Note Memory Game</h1>
+  <h1></h1>
 
   <div class="controls">
     <label>Length:
@@ -49,10 +48,8 @@
 
   <div id="status"></div>
   <div id="progress"></div>
-  <!--<div class="hint">Click “New Round” to hear a sequence, then repeat it by clicking the keys.</div>-->
 
   <script>
-    // ---------- Setup ----------
     const notes = ["C4","D4","E4","F4","G4","A4","B4"]; // white keys only; easy visual mapping
     const pianoDiv = document.getElementById("piano");
     const statusDiv = document.getElementById("status");
@@ -79,7 +76,6 @@
       keyEls[n] = el;
     });
 
-    // ---------- Helpers ----------
     function randChoice(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
 
     function setKeysLocked(locked){
@@ -181,13 +177,12 @@
       }
     }
 
-    // ---------- Wire up buttons ----------
     startBtn.addEventListener("click", startRound);
     replayBtn.addEventListener("click", replay);
 
     // Initial state
     setKeysLocked(true);
-    uiReset("Click “New Round” to begin.");
+    uiReset("");
   </script>
 </body>
 </html>

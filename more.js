@@ -1,4 +1,3 @@
-// ===== 工具数据 =====
 const toolData = {
     keyboard: {
         id: 'keyboard-card',
@@ -17,9 +16,7 @@ const toolData = {
     }
 };
 
-// ===== 模态框功能 =====
 function initToolModals() {
-    // 创建模态框模板
     const modalTemplate = `
         <div class="tool-modal" id="toolModal">
             <div class="tool-modal-content">
@@ -35,10 +32,8 @@ function initToolModals() {
         </div>
     `;
     
-    // 将模态框添加到body
     document.body.insertAdjacentHTML('beforeend', modalTemplate);
 
-    // 为工具卡片添加点击事件
     Object.entries(toolData).forEach(([key, tool]) => {
         const card = document.getElementById(tool.id);
         if (card) {
@@ -55,36 +50,32 @@ function showToolModal(toolId) {
     
     if (!toolInfo) return;
 
-    // 更新模态框内容
     modal.querySelector('.tool-modal-title').textContent = toolInfo.title;
     modal.querySelector('.tool-description').innerHTML = toolInfo.description;
     
-    // 清除旧的链接
     const linksContainer = modal.querySelector('.tool-links');
     linksContainer.innerHTML = '';
     
-    // 添加新的链接
+    
     const link = document.createElement('a');
     link.className = 'tool-link';
     link.href = toolInfo.link;
-    link.target = '_blank';  // 在新标签页打开
+    link.target = '_blank';  
     
+    /*
     if (toolInfo.type === 'extension') {
         link.textContent = 'Download Extension';
         link.download = true;
     } else {
         link.textContent = 'Open Tool';
-    }
+    }*/
     
     linksContainer.appendChild(link);
     
-    // 显示模态框
     modal.style.display = 'block';
     
-    // 添加动画效果
     modal.classList.add('modal-show');
     
-    // 移除之前的动画类
     setTimeout(() => {
         modal.classList.remove('modal-show');
     }, 1000);
@@ -95,7 +86,6 @@ function closeToolModal() {
     modal.style.display = 'none';
 }
 
-// ===== 3D 变换系统 =====
 class TiltEffect {
     constructor() {
         this.cards = document.querySelectorAll('[data-tilt]');
@@ -127,14 +117,10 @@ class TiltEffect {
     }
 }
 
-// ===== 初始化 =====
 function init() {
-    // 初始化3D变换效果
     new TiltEffect();
     
-    // 初始化工具模态框
     initToolModals();
 }
 
-// 页面加载完成后初始化
 document.addEventListener('DOMContentLoaded', init);

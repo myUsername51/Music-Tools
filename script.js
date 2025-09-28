@@ -1,4 +1,3 @@
-// ===== 全局变量和初始化 =====
 let audioContext;
 let oscillator;
 let isPlaying = false;
@@ -8,9 +7,9 @@ let mouseY = 0;
 let audioData = null;
 let analyser = null;
 let dataArray = null;
-let audioBuffer = null; // 用于存储音频文件
-let audioSource = null; // 用于存储音频源
-let currentAudioTime = 0; // 用于记录当前播放时间
+let audioBuffer = null; 
+let audioSource = null; 
+let currentAudioTime = 0; 
 
 //NOT IN USE
 class Particle {
@@ -76,6 +75,7 @@ class ParticleSystem {
         }, 2000);
     }
 
+    //NOT IN USE, but smh need/tied for audio visualizer
     createParticle() {
         const x = Math.random() * window.innerWidth;
         const y = Math.random() * window.innerHeight;
@@ -186,7 +186,7 @@ class AudioVisualizer {
 
     //draw waveform
     drawWaveform(ctx, width, height) {
-        ctx.strokeStyle = '#00ffff';
+        ctx.strokeStyle = '#5e3f28';
         ctx.lineWidth = 2;
         ctx.beginPath();
         

@@ -97,7 +97,7 @@ body {
         }
         
         .chord-block.active {
-            background-color: #4CAF50;
+            background-color: #5e3f28;
             color: white;
         }
         
@@ -127,7 +127,7 @@ body {
         .current-beat-indicator {
             height: 100%;
             width: 0%;
-            background-color: #FF5722;
+            background-color: #2c1c12;
             transition: width 0.1s;
         }
         

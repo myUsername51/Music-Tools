@@ -30,129 +30,14 @@ body {
     padding: 2rem;
 }
 
-/* ===== 粒子系统效果 ===== */
-#particles-container {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 1;
-    pointer-events: none;
-}
-
-.particle {
-    position: absolute;
-    background: radial-gradient(circle, rgba(255, 255, 255, 0.8) 0%, rgba(255, 255, 255, 0.2) 50%, transparent 100%);
-    border-radius: 50%;
-    pointer-events: none;
-    animation: particle-float 8s linear infinite;
-}
-
-@keyframes particle-float {
-    0% {
-        transform: translateY(100vh) scale(0);
-        opacity: 0;
-    }
-    10% {
-        opacity: 1;
-    }
-    90% {
-        opacity: 1;
-    }
-    100% {
-        transform: translateY(-100px) scale(1);
-        opacity: 0;
-    }
-}
-
-/* ===== 音频可视化效果 ===== */
-#audio-visualizer {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 2;
-    pointer-events: none;
-    opacity: 0;
-    transition: opacity 0.5s ease;
-}
-
-#audio-visualizer.active {
-    opacity: 1;
-}
-
-#spectrum-canvas,
-#waveform-canvas {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-}
-
-/* ===== 液体效果容器 ===== */
-#liquid-container {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 1;
-    pointer-events: none;
-}
-
-.liquid-ripple {
-    position: absolute;
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(0, 255, 255, 0.3) 0%, transparent 70%);
-    animation: ripple-expand 1s ease-out forwards;
-    pointer-events: none;
-}
-
-@keyframes ripple-expand {
-    0% {
-        transform: scale(0);
-        opacity: 1;
-    }
-    100% {
-        transform: scale(4);
-        opacity: 0;
-    }
-}
-
-/* ===== 全息投影效果 ===== */
-#hologram-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 3;
-    pointer-events: none;
-    background: 
-        linear-gradient(90deg, transparent 0%, rgba(0, 255, 255, 0.1) 50%, transparent 100%);
-    animation: hologram-scan 10s linear infinite;
-}
-
-@keyframes hologram-scan {
-    0% {
-        transform: translateY(-100%);
-    }
-    100% {
-        transform: translateY(100vh);
-    }
-}
-
-/* ===== 霓虹灯发光效果 ===== */
+/*neon pulsing text*/
 .neon-text {
     text-shadow: 
         0 0 5px rgba(255, 255, 255, 0.8),
         0 0 10px rgba(255, 255, 255, 0.6),
         0 0 15px rgba(255, 255, 255, 0.4),
-        0 0 20px rgba(0, 255, 255, 0.3),
-        0 0 25px rgba(0, 255, 255, 0.2);
+        0 0 20px rgba(255, 255, 255, 0.3),
+        0 0 25px rgba(255, 255, 255, 0.2);
     animation: neon-pulse 2s ease-in-out infinite alternate;
 }
 
@@ -162,166 +47,16 @@ body {
             0 0 5px rgba(255, 255, 255, 0.8),
             0 0 10px rgba(255, 255, 255, 0.6),
             0 0 15px rgba(255, 255, 255, 0.4),
-            0 0 20px rgba(0, 255, 255, 0.3),
-            0 0 25px rgba(0, 255, 255, 0.2);
+            0 0 20px rgba(255, 255, 255, 0.3),
+            0 0 25px rgba(255, 255, 255, 0.2);
     }
     100% {
         text-shadow: 
             0 0 10px rgba(255, 255, 255, 1),
             0 0 20px rgba(255, 255, 255, 0.8),
             0 0 30px rgba(255, 255, 255, 0.6),
-            0 0 40px rgba(0, 255, 255, 0.5),
-            0 0 50px rgba(0, 255, 255, 0.4);
-    }
-}
-
-/* ===== 激光束效果 ===== */
-.laser-beam {
-    position: absolute;
-    top: 50%;
-    left: -100%;
-    width: 200%;
-    height: 2px;
-    background: linear-gradient(90deg, transparent, #00ffff, #ff00ff, #00ffff, transparent);
-    transform: translateY(-50%);
-    animation: laser-sweep 3s ease-in-out infinite;
-    opacity: 0;
-}
-
-.hologram-button:hover .laser-beam {
-    opacity: 1;
-}
-
-@keyframes laser-sweep {
-    0%, 100% {
-        transform: translateY(-50%) translateX(-100%);
-    }
-    50% {
-        transform: translateY(-50%) translateX(0%);
-    }
-}
-
-/* ===== 3D 变换和视差效果 ===== */
-.hologram-card {
-    transform-style: preserve-3d;
-    perspective: 1000px;
-    transition: transform 0.3s ease;
-}
-
-.hologram-card:hover {
-    transform: rotateX(10deg) rotateY(10deg) translateZ(20px);
-}
-
-.card-content {
-    position: relative;
-    z-index: 2;
-}
-
-.hologram-scan-line {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 2px;
-    background: linear-gradient(90deg, transparent, #00ffff, transparent);
-    animation: scan-line 2s linear infinite;
-    opacity: 0;
-}
-
-.hologram-card:hover .hologram-scan-line {
-    opacity: 1;
-}
-
-@keyframes scan-line {
-    0% {
-        transform: translateY(0);
-    }
-    100% {
-        transform: translateY(100%);
-    }
-}
-
-/* ===== 全息滤镜效果 ===== */
-.hologram-card {
-    backdrop-filter: blur(10px);
-    background: rgba(0, 255, 255, 0.05);
-    border: 1px solid rgba(0, 255, 255, 0.2);
-    box-shadow: 
-        0 0 20px rgba(0, 255, 255, 0.1),
-        inset 0 0 20px rgba(0, 255, 255, 0.05);
-}
-
-.hologram-card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(45deg, 
-        transparent 0%, 
-        rgba(0, 255, 255, 0.1) 25%, 
-        transparent 50%, 
-        rgba(255, 0, 255, 0.1) 75%, 
-        transparent 100%);
-    opacity: 0;
-    transition: opacity 0.3s ease;
-}
-
-.hologram-card:hover::before {
-    opacity: 1;
-}
-
-/* 3D Bubble Effects */
-.bubble {
-    position: absolute;
-    border-radius: 50%;
-    background: radial-gradient(circle at 30% 30%, 
-        rgba(255, 255, 255, 0.1) 0%, 
-        rgba(255, 255, 255, 0.05) 40%, 
-        rgba(0, 0, 0, 0.3) 100%);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    box-shadow: 
-        0 0 20px rgba(255, 255, 255, 0.1),
-        inset 0 0 20px rgba(255, 255, 255, 0.05);
-    animation: float 6s ease-in-out infinite;
-    z-index: 1;
-}
-
-.bubble-1 {
-    width: 200px;
-    height: 200px;
-    top: 20%;
-    left: 15%;
-    animation-delay: 0s;
-}
-
-.bubble-2 {
-    width: 120px;
-    height: 120px;
-    top: 60%;
-    left: 10%;
-    animation-delay: 2s;
-}
-
-.bubble-3 {
-    width: 80px;
-    height: 80px;
-    top: 30%;
-    right: 20%;
-    animation-delay: 4s;
-}
-
-@keyframes float {
-    0%, 100% {
-        transform: translateY(0px) rotate(0deg);
-    }
-    33% {
-        transform: translateY(-20px) rotate(120deg);
-    }
-    66% {
-        transform: translateY(10px) rotate(240deg);
+            0 0 40px rgba(255, 255, 255, 0.5),
+            0 0 50px rgba(255, 255, 255, 0.4);
     }
 }
 
@@ -351,80 +86,6 @@ body {
     letter-spacing: 0.05em;
 }
 
-/* Wave Text Animation */
-.wave-text .char {
-    display: inline-block;
-    transition: transform 0.3s ease;
-}
-
-.wave-text.animate .char {
-    animation: wave 0.6s ease-in-out;
-}
-
-@keyframes wave {
-    0%, 100% {
-        transform: translateY(0) scale(1);
-    }
-    50% {
-        transform: translateY(-10px) scale(1.1);
-    }
-}
-
-/* Play Button */
-.play-section {
-    margin: 3rem 0;
-}
-
-.play-button {
-    background: rgba(255, 255, 255, 0.1);
-    border: 2px solid rgba(255, 255, 255, 0.2);
-    border-radius: 50px;
-    padding: 1.5rem 3rem;
-    color: #e0e0e0;
-    font-size: 1.1rem;
-    font-weight: 400;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    backdrop-filter: blur(10px);
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    margin: 0 auto;
-    position: relative;
-    overflow: hidden;
-}
-
-.play-button:hover {
-    background: rgba(255, 255, 255, 0.2);
-    border-color: rgba(255, 255, 255, 0.4);
-    transform: translateY(-2px);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-}
-
-.play-button:active {
-    transform: translateY(0);
-}
-
-.play-icon {
-    font-size: 1.5rem;
-    transition: transform 0.3s ease;
-}
-
-.play-button:hover .play-icon {
-    transform: scale(1.2);
-}
-
-.play-text {
-    font-weight: 600;
-    letter-spacing: 0.1em;
-}
-
-.sample-info {
-    margin-top: 1rem;
-    font-size: 0.9rem;
-    opacity: 0.6;
-}
-
 /* Tools Grid */
 .tools-grid {
     display: grid;
@@ -434,6 +95,15 @@ body {
     margin: 0 auto;
     width: 100%;
     max-width: 500px;
+}
+.tools-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
+    padding: 2rem;
+    width: 100%;
+    max-width: 1500px;
+    margin: 0 auto;
 }
 
 .tool-card {
@@ -488,7 +158,6 @@ body {
     margin: 0 auto 2rem auto;
 }
 
-
 .tool-card p {
     font-size: 1.5rem;
     opacity: 0.8;
@@ -506,11 +175,7 @@ body {
     .subtitle {
         font-size: 1rem;
     }
-    
-    .play-button {
-        padding: 1rem 2rem;
-        font-size: 1rem;
-    }
+
     
     .tools-grid {
         grid-template-columns: 1fr;
@@ -530,49 +195,7 @@ body {
     .tool-card p {
         font-size: 1.2rem;
     }
-    
-    .bubble {
-        display: none;
-    }
-}
 
-/* Bubble Interaction with Text */
-.bubble:hover {
-    animation-play-state: paused;
-    transform: scale(1.1);
-}
-
-/* Audio Visualizer Effect */
-.audio-playing {
-    animation: pulse 0.5s ease-in-out;
-}
-
-@keyframes pulse {
-    0%, 100% {
-        transform: scale(1);
-    }
-    50% {
-        transform: scale(1.05);
-    }
-}
-
-/* Glow Effect for Interactive Elements */
-.play-button:hover,
-.tool-card:hover {
-    box-shadow: 
-        0 0 20px rgba(255, 255, 255, 0.1),
-        0 0 40px rgba(255, 255, 255, 0.05);
-}
-
-/* ===== 更多工具页面样式 ===== */
-.tools-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 2rem;
-    padding: 2rem;
-    width: 100%;
-    max-width: 1500px;
-    margin: 0 auto;
 }
 
 .back-button {
@@ -592,22 +215,21 @@ body {
     color: #e0e0e0;
     backdrop-filter: blur(10px);
     background: rgba(0, 255, 255, 0.05);
-    border: 1px solid rgba(0, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.2);
     box-shadow: 0 4px 20px rgba(0, 255, 255, 0.1);
     transition: all 0.3s ease;
 }
 
 .back-button a:hover {
-    background: rgba(0, 255, 255, 0.1);
-    border-color: rgba(0, 255, 255, 0.3);
-    box-shadow: 0 4px 20px rgba(0, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.3);
+    box-shadow: 0 4px 20px rgba(255, 255, 255, 0.2);
 }
 
 .back-icon {
     font-size: 1.2rem;
 }
 
-/* ===== 适配移动端 ===== */
 @media (max-width: 1200px) {
     .tools-grid {
         grid-template-columns: repeat(2, 1fr);
@@ -663,7 +285,6 @@ body {
     }
 }
 
-/* ===== 模态框样式 ===== */
 .tool-modal {
     display: none;
     position: fixed;
@@ -731,7 +352,7 @@ body {
 }
 
 .close-modal:hover {
-    color: #00ffff;
+    color: #2c1c12;
 }
 
 .tool-modal-body {
@@ -776,160 +397,6 @@ body {
     border-color: rgba(0, 255, 255, 0.3);
 }
 
-/* ===== 更多工具按钮样式 ===== */
-.more-tools-button {
-    position: absolute;
-    bottom: -5vh; 
-    right: 2rem;
-    z-index: 10;
-}
-
-.more-tools-button a {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 1rem 2rem;
-    border-radius: 50px;
-    text-decoration: none;
-    color: #e0e0e0;
-    backdrop-filter: blur(10px);
-    background: rgba(0, 255, 255, 0.05);
-    border: 1px solid rgba(0, 255, 255, 0.2);
-    box-shadow: 0 4px 20px rgba(0, 255, 255, 0.1);
-    transition: all 0.3s ease;
-}
-
-.more-tools-button a:hover {
-    background: rgba(0, 255, 255, 0.1);
-    border-color: rgba(0, 255, 255, 0.3);
-    box-shadow: 0 4px 20px rgba(0, 255, 255, 0.2);
-}
-
-.play-icon {
-    font-size: 1.2rem;
-}
-
-/* ===== 音频控制样式 ===== */
-.audio-controls {
-    display: flex;
-    align-items: center;
-    gap: 2rem;
-    margin-bottom: 2rem;
-}
-
-.upload-button-container {
-    position: relative;
-}
-
-.upload-button {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 1rem 2rem;
-    border-radius: 50px;
-    text-decoration: none;
-    color: #e0e0e0;
-    backdrop-filter: blur(10px);
-    background: rgba(0, 255, 255, 0.05);
-    border: 1px solid rgba(0, 255, 255, 0.2);
-    box-shadow: 0 4px 20px rgba(0, 255, 255, 0.1);
-    transition: all 0.3s ease;
-    cursor: pointer;
-}
-
-.upload-button:hover {
-    background: rgba(0, 255, 255, 0.1);
-    border-color: rgba(0, 255, 255, 0.3);
-    box-shadow: 0 4px 20px rgba(0, 255, 255, 0.2);
-}
-
-.upload-icon {
-    font-size: 1.2rem;
-}
-
-.sample-info {
-    color: #e0e0e0;
-    margin-top: 1rem;
-    text-align: center;
-}
-
-/* ===== 音频控制样式 ===== */
-.audio-controls {
-    display: flex;
-    align-items: center;
-    gap: 2rem;
-    margin-bottom: 2rem;
-}
-
-.play-icon, .pause-icon {
-    font-size: 1.2rem;
-    display: inline-block;
-}
-
-.play-text, .stop-text {
-    font-size: 1rem;
-    margin: 0 0.5rem;
-}
-
-.play-icon, .play-text {
-    display: inline;
-}
-
-.pause-icon, .stop-text {
-    display: none;
-}
-
-.play-button.audio-playing .play-icon,
-.play-button.audio-playing .play-text {
-    display: none;
-}
-
-.play-button.audio-playing .pause-icon,
-.play-button.audio-playing .stop-text {
-    display: inline;
-}
-
-.upload-button-container {
-    position: relative;
-}
-
-.upload-button {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 1rem 2rem;
-    border-radius: 50px;
-    text-decoration: none;
-    color: #e0e0e0;
-    backdrop-filter: blur(10px);
-    background: rgba(0, 255, 255, 0.05);
-    border: 1px solid rgba(0, 255, 255, 0.2);
-    box-shadow: 0 4px 20px rgba(0, 255, 255, 0.1);
-    transition: all 0.3s ease;
-    cursor: pointer;
-}
-
-.upload-button:hover {
-    background: rgba(0, 255, 255, 0.1);
-    border-color: rgba(0, 255, 255, 0.3);
-    box-shadow: 0 4px 20px rgba(0, 255, 255, 0.2);
-}
-
-.upload-icon {
-    font-size: 1.2rem;
-}
-
-.sample-info {
-    color: #e0e0e0;
-    margin-top: 1rem;
-    text-align: center;
-}
-
-.tool-modal {
-    overflow-y: auto;
-}
-
-/* ===== 卡片内图片样式 ===== */
 .card-image {
     width: 100%;
     min-height: 300px;
@@ -948,7 +415,6 @@ body {
     box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
 }
 
-/* ===== 卡片内图片响应式设计 ===== */
 @media (max-width: 1200px) {
     .card-image {
         max-width: 280px;
