@@ -175,7 +175,6 @@ class AudioVisualizer {
             const x = i * barWidth;
             const y = height - barHeight;
             
-            // 根据频率设置颜色
             const hue = (i / this.dataArray.length) * 360;
             const color = `hsl(${hue}, 70%, 50%)`;
             
@@ -217,7 +216,6 @@ class LiquidEffect {
         this.container = document.getElementById('liquid-container');
     }
 
-    // 创建涟漪效果
     createRipple(x, y) {
         const ripple = document.createElement('div');
         ripple.className = 'liquid-ripple';
@@ -274,7 +272,7 @@ const toolData = {
     keyboard: {
         id: 'keyboard-card',
         title: 'Keyboard Player',
-        description: 'Perfect timing for practice. Stay in rhythm with our precise metronome.',
+        description: 'Play the piano with this digital keyboard.',
         mini: '<iframe src="player/keyboardPlayer/keyboard.html" width="1000" height="800" style="border: none;"></iframe>',
         type: 'web',
         link: 'player/keyboardPlayer/keyboard.html'
@@ -282,7 +280,7 @@ const toolData = {
     chordPlayer: {
         id: 'chord-card',
         title: 'Chord Player',
-        description: 'Stay in tune with our accurate tuner. Perfect for all instruments.',
+        description: 'Discover new chord progressions and write songs.',
         mini: '<iframe src="player/chordPlayer/index.html" width="1000" height="400" style="border: none;"></iframe>',
         type: 'web',
         link: 'player/chordPlayer/index.html'
@@ -290,7 +288,7 @@ const toolData = {
     drumPlayer: {
         id: 'drums-card',
         title: 'Drum Player',
-        description: 'Discover new chord progressions and learn different voicings.',
+        description: 'Be a beatmaker.',
         mini: '<iframe src="player/drumPlayer/drumPlayer.html" width="1000" height="800" style="border: none;"></iframe>',
         type: 'web',
         link: 'player/drumPlayer/drumPlayer.html'
@@ -298,7 +296,7 @@ const toolData = {
     pitchTrainer: {
         id: 'pitch-card',
         title: 'Pitch Trainer',
-        description: 'Become pitch perfect',
+        description: 'Quickly identify pitches by ear.',
         mini: '<iframe src="trainer/pitchTrainer/pitchTrainer.html" width="1000" height="300" style="border: none;"></iframe>',
         type: 'web',
         link: 'trainer/pitchTrainer/index.html'
@@ -306,7 +304,7 @@ const toolData = {
     scaleTrainer: {
         id: 'scale-card',
         title: 'Scale Trainer',
-        description: 'Familiarize yourself with scales in any key and mode.',
+        description: 'Familiarize yourself with scales in any key.',
         mini: '<iframe src="trainer/scaleTrainer/v3.html" width="1000" height="300" style="border: none;"></iframe>',
         type: 'web',
         link: 'trainer/scaleTrainer/index.html'

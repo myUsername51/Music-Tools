@@ -1,4 +1,3 @@
-// Use a self-invoking function to avoid polluting the global scope.
 //(function() {
     // Get references to all necessary DOM elements.
     const mainActionButton = document.getElementById('mainActionButton');
@@ -28,8 +27,6 @@
     let score = 0;
     let totalRounds = 0;
     let octaveRange = 'one';
-
-    // --- Utility Functions ---
 
     // Function to dynamically render the keyboard based on the octave range.
     function renderKeyboard(notes) {
@@ -148,7 +145,6 @@
         document.querySelectorAll('.white-key, .black-key').forEach(key => key.disabled = true);
     }
 
-    // --- Event Handlers ---
 
     // Handler for the combined "Start" and "Next" button.
     function handleMainActionButtonClick() {
@@ -238,7 +234,6 @@
         handleMainActionButtonClick();
     }
 
-    // --- Main Initialization ---
 
     // Wait for the window to load before initializing Tone.js.
     window.addEventListener('load', () => {
